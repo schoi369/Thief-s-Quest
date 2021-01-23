@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public float extraGrabTime = .1f;
     private float extraGrabTimeCounter;
     float lastLocalScale;
+    bool hasWallJumped;
 
     // Start is called before the first frame update
     void Start()
@@ -63,15 +64,17 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = Vector2.zero;
                 lastLocalScale = transform.localScale.x;
                 extraGrabTimeCounter = extraGrabTime;
+                hasWallJumped = false;
             } else {
                 rb.gravityScale = gravityStore;
                 extraGrabTimeCounter -= Time.deltaTime;
             }
-            if (Input.GetButtonDown("Jump") && extraGrabTimeCounter > 0) {
+            if (Input.GetButtonDown("Jump") && extraGrabTimeCounter > 0 && !hasWallJumped) {
                 wallJumpCounter = wallJumpTime;
                 rb.velocity = new Vector2(-lastLocalScale * moveSpeed, jumpForce);
                 rb.gravityScale = gravityStore;
                 isGrabbingWall = false;
+                hasWallJumped = true;
             }
 
             ManageFlipping();

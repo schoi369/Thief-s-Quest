@@ -268,7 +268,7 @@ MonoBehaviour:
     m_Bits: 256
   wallGrabPoint: {fileID: 1344648066}
   wallJumpTime: 0.2
-  extraGrabTime: 0.5
+  extraGrabTime: 0.15
 --- !u!95 &239343833
 Animator:
   serializedVersion: 3
