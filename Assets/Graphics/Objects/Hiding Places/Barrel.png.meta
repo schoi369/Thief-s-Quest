@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 05c4983f84a66f04e960130b8aa08690
+guid: e4cb28964bdf3a64fb7d3298f0165d80
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4567269225983940740
-    second: Hiding_Place_Statue_0
+      213: 1380203805528671675
+    second: Barrel_0
   - first:
-      213: -5398578416327880225
-    second: Hiding_Place_Statue_1
+      213: -7723265081315097764
+    second: Barrel_1
   - first:
-      213: -2830071645898275730
-    second: Statue_0
-  - first:
-      213: 130561695280464317
-    second: Statue_1
+      213: -2888349210121263780
+    second: Barrel_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -99,12 +96,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Statue_0
+      name: Barrel_1
       rect:
         serializedVersion: 2
-        x: 0
+        x: 11
         y: 0
-        width: 7
+        width: 11
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -113,19 +110,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e64045915d099b8d0800000000000000
-      internalID: -2830071645898275730
+      spriteID: c530902045371d490800000000000000
+      internalID: -7723265081315097764
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Statue_1
+      name: Barrel_0
       rect:
         serializedVersion: 2
-        x: 7
+        x: 0
         y: 0
-        width: 7
+        width: 11
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -134,8 +131,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db1077c8b29dfc100800000000000000
-      internalID: 130561695280464317
+      spriteID: c55217f42b58ae7d0800000000000000
+      internalID: -2888349210121263780
       vertices: []
       indices: 
       edges: []

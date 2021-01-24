@@ -33,13 +33,13 @@ public class PlayerActionController : MonoBehaviour
             Debug.Log("isScouting: " + isScouting);
         }
 
-        if (Input.GetKeyDown(KeyCode.Z)) {
+        if (Input.GetKeyDown(KeyCode.L)) {
             HideUnhide();
         }
     }
 
     void HideUnhide() {
-        if (hidingPlace == null || Vector2.Distance(transform.position, hidingPlace.position) > 1f) {
+        if (hidingPlace == null || Vector2.Distance(transform.position, hidingPlace.position) >= 1.1f) {
             return;
         }
 
@@ -50,6 +50,18 @@ public class PlayerActionController : MonoBehaviour
             isHiding = true;
         }
         PlayerMovementController.instance.isGrabbingWall = false;
-        animator.SetBool("isHiding", isHiding);
+
+        // Set appropriate animation
+        switch (hidingPlace.GetComponent<HidingPlace>().type) {
+            case HidingPlace.HidingPlaceType.Statue:
+                animator.SetBool("isHiding_Statue", isHiding);
+                break;
+            case HidingPlace.HidingPlaceType.Door:
+                animator.SetBool("isHiding_Door", isHiding);
+                break;
+            case HidingPlace.HidingPlaceType.Barrel:
+                animator.SetBool("isHiding_Barrel", isHiding);
+                break;
+        }
     }
 }

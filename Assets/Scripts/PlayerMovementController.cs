@@ -56,7 +56,7 @@ public class PlayerMovementController : MonoBehaviour
                 rb.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), rb.velocity.y);
 
                 isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .1f, groundLayerMask);
-                if (Input.GetButtonDown("Jump")) {
+                if (Input.GetKeyDown(KeyCode.K)) {
                     if (isGrounded) {
                         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                     }
@@ -80,7 +80,7 @@ public class PlayerMovementController : MonoBehaviour
                     rb.gravityScale = gravityStore;
                     extraGrabTimeCounter -= Time.deltaTime;
                 }
-                if (Input.GetButtonDown("Jump") && extraGrabTimeCounter > 0 && !hasWallJumped) {
+                if (Input.GetKeyDown(KeyCode.K) && extraGrabTimeCounter > 0 && !hasWallJumped) {
                     wallJumpCounter = wallJumpTime;
                     rb.velocity = new Vector2(-lastLocalScale * moveSpeed, jumpForce);
                     rb.gravityScale = gravityStore;
