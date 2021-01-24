@@ -15,12 +15,12 @@ public class PlayerMovementController : MonoBehaviour
 
     bool facingRight;
 
-    bool isGrounded;
+    public bool isGrounded;
     public Transform groundCheckPoint;
     public LayerMask groundLayerMask;
 
     bool canGrabWall;
-    bool isGrabbingWall;
+    public bool isGrabbingWall;
     public Transform wallGrabPoint;
     private float gravityStore;
     public float wallJumpTime = .1f;
@@ -30,7 +30,7 @@ public class PlayerMovementController : MonoBehaviour
     float lastLocalScale;
     bool hasWallJumped;
 
-    public bool isScouting;
+    public bool canMove;
 
     void Awake() {
         instance = this;
@@ -48,12 +48,9 @@ public class PlayerMovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded) {
-            isScouting = !isScouting;
-            Debug.Log("isScouting: " + isScouting);
-        }
+        ManageCanMove();
 
-        if (!isScouting && !PlayerActionController.instance.isHiding) {
+        if (canMove) {
             if (wallJumpCounter <= 0) {
 
                 rb.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), rb.velocity.y);
@@ -113,6 +110,14 @@ public class PlayerMovementController : MonoBehaviour
         if (rb.velocity.x < 0) {
             transform.localScale = new Vector3(-1f, 1, 1f);
             facingRight = false;
+        }
+    }
+
+    void ManageCanMove() {
+        if (PlayerActionController.instance.isHiding || PlayerActionController.instance.isScouting) {
+            canMove = false;
+        } else {
+            canMove = true;
         }
     }
 }

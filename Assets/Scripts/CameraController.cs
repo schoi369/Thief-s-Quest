@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerMovementController.instance.isScouting) {
+        if (PlayerActionController.instance.isScouting) {
             velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
             transform.Translate(velocity * Time.deltaTime);
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, target.position.x - horizontalViewDistance, target.position.x + horizontalViewDistance),

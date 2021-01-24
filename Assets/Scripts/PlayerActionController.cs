@@ -12,6 +12,7 @@ public class PlayerActionController : MonoBehaviour
     public Transform hidingPlace;
 
     public bool isHiding;
+    public bool isScouting;
 
     void Awake() {
         instance = this;
@@ -27,6 +28,11 @@ public class PlayerActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
+            isScouting = !isScouting;
+            Debug.Log("isScouting: " + isScouting);
+        }
+
         if (Input.GetKeyDown(KeyCode.Z)) {
             HideUnhide();
         }
@@ -40,9 +46,10 @@ public class PlayerActionController : MonoBehaviour
         if (isHiding) {
             isHiding = false;
         } else {
-            transform.position = new Vector2(hidingPlace.position.x + .5f, hidingPlace.position.y);
+            transform.position = new Vector2(hidingPlace.position.x, hidingPlace.position.y);
             isHiding = true;
         }
+        PlayerMovementController.instance.isGrabbingWall = false;
         animator.SetBool("isHiding", isHiding);
     }
 }
