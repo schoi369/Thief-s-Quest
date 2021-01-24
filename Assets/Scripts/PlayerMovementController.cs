@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour
 {
-    public static PlayerController instance;
+    public static PlayerMovementController instance;
 
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("isScouting: " + isScouting);
         }
 
-        if (!isScouting) {
+        if (!isScouting && !PlayerActionController.instance.isHiding) {
             if (wallJumpCounter <= 0) {
 
                 rb.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), rb.velocity.y);
