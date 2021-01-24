@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
     public Animator animator;
@@ -28,6 +30,12 @@ public class PlayerController : MonoBehaviour
     float lastLocalScale;
     bool hasWallJumped;
 
+    public bool isScouting;
+
+    void Awake() {
+        instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,52 +48,62 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (wallJumpCounter <= 0) {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded) {
+            isScouting = !isScouting;
+            Debug.Log("isScouting: " + isScouting);
+        }
 
-            rb.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), rb.velocity.y);
+        if (!isScouting) {
+            if (wallJumpCounter <= 0) {
 
-            isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .1f, groundLayerMask);
-            if (Input.GetButtonDown("Jump")) {
-                if (isGrounded) {
-                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                rb.velocity = new Vector2(moveSpeed * Input.GetAxisRaw("Horizontal"), rb.velocity.y);
+
+                isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, .1f, groundLayerMask);
+                if (Input.GetButtonDown("Jump")) {
+                    if (isGrounded) {
+                        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    }
                 }
-            }
 
-            // Handle wall jumping
-            isGrabbingWall = false;
-            canGrabWall = Physics2D.OverlapCircle(wallGrabPoint.position, .2f, groundLayerMask);
-            if (canGrabWall && !isGrounded) {
-                if ((facingRight && Input.GetAxisRaw("Horizontal") >= 0) || (!facingRight && Input.GetAxisRaw("Horizontal") <= 0)) {
-                    isGrabbingWall = true;
-                }
-            }
-            if (isGrabbingWall) {
-                rb.gravityScale = 0f;
-                rb.velocity = Vector2.zero;
-                lastLocalScale = transform.localScale.x;
-                extraGrabTimeCounter = extraGrabTime;
-                hasWallJumped = false;
-            } else {
-                rb.gravityScale = gravityStore;
-                extraGrabTimeCounter -= Time.deltaTime;
-            }
-            if (Input.GetButtonDown("Jump") && extraGrabTimeCounter > 0 && !hasWallJumped) {
-                wallJumpCounter = wallJumpTime;
-                rb.velocity = new Vector2(-lastLocalScale * moveSpeed, jumpForce);
-                rb.gravityScale = gravityStore;
+                // Handle wall jumping
                 isGrabbingWall = false;
-                hasWallJumped = true;
-            }
+                canGrabWall = Physics2D.OverlapCircle(wallGrabPoint.position, .2f, groundLayerMask);
+                if (canGrabWall && !isGrounded) {
+                    if ((facingRight && Input.GetAxisRaw("Horizontal") >= 0) || (!facingRight && Input.GetAxisRaw("Horizontal") <= 0)) {
+                        isGrabbingWall = true;
+                    }
+                }
+                if (isGrabbingWall) {
+                    rb.gravityScale = 0f;
+                    rb.velocity = Vector2.zero;
+                    lastLocalScale = transform.localScale.x;
+                    extraGrabTimeCounter = extraGrabTime;
+                    hasWallJumped = false;
+                } else {
+                    rb.gravityScale = gravityStore;
+                    extraGrabTimeCounter -= Time.deltaTime;
+                }
+                if (Input.GetButtonDown("Jump") && extraGrabTimeCounter > 0 && !hasWallJumped) {
+                    wallJumpCounter = wallJumpTime;
+                    rb.velocity = new Vector2(-lastLocalScale * moveSpeed, jumpForce);
+                    rb.gravityScale = gravityStore;
+                    isGrabbingWall = false;
+                    hasWallJumped = true;
+                }
 
-            ManageFlipping();
+                ManageFlipping();
+            } else {
+                wallJumpCounter -= Time.deltaTime;
+            }
         } else {
-            wallJumpCounter -= Time.deltaTime;
+            rb.velocity = Vector2.zero;
         }
 
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isGrabbingWall", isGrabbingWall);
 
     }
+
 
     void ManageFlipping() {
         if (rb.velocity.x > 0) {
