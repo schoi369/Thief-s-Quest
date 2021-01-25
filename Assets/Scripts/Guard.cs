@@ -39,6 +39,7 @@ public class Guard : MonoBehaviour
 
     [Header("UI Related")]
     public Image detectMeter;
+    public Transform statusIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -102,6 +103,10 @@ public class Guard : MonoBehaviour
     }
 
     void ManagePlayerDetection() {
+        if (PlayerActionController.instance.isHiding) {
+            playerInVision = false;
+            return;
+        }
         // Shoots ray, checking objects in Player, Ground, Obstacle layer
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, lookDirection, viewDistance, playerAndObstacleLayerMask);
         if (hitInfo.collider != null) {
@@ -139,6 +144,11 @@ public class Guard : MonoBehaviour
         state = State.Suspicious;
         detectMeasure = 0;
         suspiciousPosition = positionToCheck;
+        if (!facingRight) {
+            statusIcon.localScale = new Vector3(-1, 1, 1);
+        }
+        statusIcon.GetComponent<Animator>().SetTrigger("isSuspicious");
+        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", true);
     }
 
     void Patrol() {
