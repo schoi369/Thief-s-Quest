@@ -7,30 +7,33 @@ public class Guard : MonoBehaviour
 {
     Rigidbody2D rb;
     public float moveSpeed;
-
     bool facingRight;
-    public Vector3 lookDirection;
-    public float viewDistance; // Set in inspector
+
+    [Header("Detection Related")]
     public bool playerInVision;
-    public float detectMeasure;
+    Vector3 lookDirection;
+    public float viewDistance; // Set in inspector
+    float detectMeasure;
     float detectMeasureIncrease = 3f;
     float detectMeasureDecrese = 1f;
     float PatrolMax = 10f;
     float SuspiciousMax = 5f;
     public LayerMask playerAndObstacleLayerMask;
 
-
     public enum State {
         Patrol, Suspicious, Alert, Sleeping
     }
-    public State state;
     public enum PatrolState {
         Standing, Waiting, MovingToNextPoint
     }
+    [Header("State Related")]
+    public State state;
     public PatrolState patrolState;
 
     public Transform leftPoint, rightPoint;
     bool movingRight;
+    float patrolWaitTime;
+    public float startPatrolWaitTime; // Set in inspector
 
     Vector2 suspiciousPosition;
 
@@ -42,6 +45,8 @@ public class Guard : MonoBehaviour
     {
         Physics2D.queriesStartInColliders = false;
         rb = GetComponent<Rigidbody2D>();
+
+        SetTimes();
 
         // Release move points
         leftPoint.parent = null;
@@ -126,6 +131,10 @@ public class Guard : MonoBehaviour
         }
     }
 
+    void SetTimes() {
+        patrolWaitTime = startPatrolWaitTime;
+    }
+
     void BecomeSuspiciousState(Vector2 positionToCheck) {
         state = State.Suspicious;
         detectMeasure = 0;
@@ -145,19 +154,27 @@ public class Guard : MonoBehaviour
                     rb.MovePosition(rb.position + new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
                     if (transform.position.x > rightPoint.position.x) {
                         movingRight = false;
+                        patrolState = PatrolState.Waiting;
                     }
-                }
-                if (!movingRight) {
+                } else if (!movingRight) {
                     if (facingRight) {
                         facingRight = false;
                     }
                     rb.MovePosition(rb.position - new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
                     if (transform.position.x < leftPoint.position.x) {
                         movingRight = true;
+                        patrolState = PatrolState.Waiting;
                     }
                 }
                 break;
             case PatrolState.Waiting:
+                if (patrolWaitTime <= 0) {
+                    patrolWaitTime = startPatrolWaitTime;
+
+                    patrolState = PatrolState.MovingToNextPoint;
+                } else {
+                    patrolWaitTime -= Time.deltaTime;
+                }
                 break;
         }
     }
