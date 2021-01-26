@@ -345,10 +345,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   state: 0
-  patrolState: 0
+  patrolState: 2
+  suspiciousState: 0
   leftPoint: {fileID: 1064181865}
   rightPoint: {fileID: 658191346}
   startPatrolWaitTime: 3
+  startSuspiciousWaitTime: 5
   detectMeter: {fileID: 1793522991}
   statusIcon: {fileID: 305088149}
 --- !u!1 &239343827

@@ -26,14 +26,20 @@ public class Guard : MonoBehaviour
     public enum PatrolState {
         Standing, Waiting, MovingToNextPoint
     }
+    public enum SuspiciousState {
+        MovingToSuspiciousPosition, Waiting, ReturningToPoint
+    }
     [Header("State Related")]
     public State state;
     public PatrolState patrolState;
+    public SuspiciousState suspiciousState;
 
     public Transform leftPoint, rightPoint;
     bool movingRight;
     float patrolWaitTime;
     public float startPatrolWaitTime; // Set in inspector
+    float suspiciousWaitTime;
+    public float startSuspiciousWaitTime; // Set in inspector
 
     Vector2 suspiciousPosition;
 
@@ -86,7 +92,7 @@ public class Guard : MonoBehaviour
                 Patrol();
                 break;
         case State.Suspicious:
-
+                Suspicious();
                 break;
         }
     }
@@ -95,10 +101,12 @@ public class Guard : MonoBehaviour
         if (facingRight) {
             transform.localScale = Vector3.one;
             lookDirection = transform.right;
+            statusIcon.localScale = new Vector3(1, 1, 1);
         }
         if (!facingRight) {
             transform.localScale = new Vector3(-1f, 1, 1f);
             lookDirection = -transform.right;
+            statusIcon.localScale = new Vector3(-1, 1, 1);
         }
     }
 
@@ -140,15 +148,16 @@ public class Guard : MonoBehaviour
 
     void SetTimes() {
         patrolWaitTime = startPatrolWaitTime;
+        suspiciousWaitTime = startSuspiciousWaitTime;
     }
 
     void BecomeSuspiciousState(Vector2 positionToCheck) {
         state = State.Suspicious;
+        suspiciousState = SuspiciousState.MovingToSuspiciousPosition;
         detectMeasure = 0;
         suspiciousPosition = positionToCheck;
-        if (!facingRight) {
-            statusIcon.localScale = new Vector3(-1, 1, 1);
-        }
+        
+        statusIcon.GetComponent<SpriteRenderer>().color = Color.white;
         statusIcon.GetComponent<Animator>().SetTrigger("isSuspicious");
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", true);
     }
@@ -193,7 +202,74 @@ public class Guard : MonoBehaviour
     }
 
     void PatrolFromMovingToWaiting() {
-        patrolState = patrolState = PatrolState.Waiting;
+        patrolState = PatrolState.Waiting;
         statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", true);
     }
+
+    void Suspicious() {
+        switch (suspiciousState) {
+            case SuspiciousState.MovingToSuspiciousPosition:
+                rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                if (Vector2.Distance(rb.position, suspiciousPosition) < .1f) {
+                    SuspiciousFromMovingToWaiting();
+                }
+                break;
+            case SuspiciousState.Waiting:
+                if (suspiciousWaitTime <= 0) {
+                    suspiciousWaitTime = startSuspiciousWaitTime;
+                    statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", false);
+                    statusIcon.GetComponent<SpriteRenderer>().color = Color.white;
+                    suspiciousState = SuspiciousState.ReturningToPoint;
+                } else {
+                    suspiciousWaitTime -= Time.deltaTime;
+                    statusIcon.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((float) suspiciousWaitTime / (float) startSuspiciousWaitTime));
+                }
+                break;
+            case SuspiciousState.ReturningToPoint:
+                if (suspiciousPosition.x < leftPoint.position.x) {
+                    facingRight = true;
+                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                    if (rb.position.x > rightPoint.position.x) {
+                        state = State.Patrol;
+                        patrolState = PatrolState.MovingToNextPoint;
+                        patrolWaitTime = startPatrolWaitTime;
+                        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                    }
+                } else if (suspiciousPosition.x >= leftPoint.position.x && suspiciousPosition.x <= rightPoint.position.x) {
+                    if (facingRight) {
+                        rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                        if (rb.position.x > rightPoint.position.x) {
+                            state = State.Patrol;
+                            patrolState = PatrolState.MovingToNextPoint;
+                            patrolWaitTime = startPatrolWaitTime;
+                            statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                        }
+                    } else {
+                        rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                        if (rb.position.x < leftPoint.position.x) {
+                            state = State.Patrol;
+                            patrolState = PatrolState.MovingToNextPoint;
+                            patrolWaitTime = startPatrolWaitTime;
+                            statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                        }
+                    }
+                } else if (suspiciousPosition.x > rightPoint.position.x) {
+                    facingRight = false;
+                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                    if (rb.position.x < leftPoint.position.x) {
+                        state = State.Patrol;
+                        patrolState = PatrolState.MovingToNextPoint;
+                        patrolWaitTime = startPatrolWaitTime;
+                        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                    }
+                }
+                break;
+        }
+    }
+
+    void SuspiciousFromMovingToWaiting() {
+        suspiciousState = SuspiciousState.Waiting;
+        statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", true);        
+    }
+
 }
