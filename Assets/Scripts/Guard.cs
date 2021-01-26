@@ -113,6 +113,8 @@ public class Guard : MonoBehaviour
             Debug.DrawLine(transform.position, hitInfo.point, Color.red);
             if (hitInfo.collider.CompareTag("Player")) {
                 playerInVision = true;
+            } else {
+                playerInVision = false;
             }
         } else {
             Debug.DrawLine(transform.position, transform.position + lookDirection * viewDistance, Color.green);
@@ -164,7 +166,7 @@ public class Guard : MonoBehaviour
                     rb.MovePosition(rb.position + new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
                     if (transform.position.x > rightPoint.position.x) {
                         movingRight = false;
-                        patrolState = PatrolState.Waiting;
+                        PatrolFromMovingToWaiting();
                     }
                 } else if (!movingRight) {
                     if (facingRight) {
@@ -173,19 +175,25 @@ public class Guard : MonoBehaviour
                     rb.MovePosition(rb.position - new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
                     if (transform.position.x < leftPoint.position.x) {
                         movingRight = true;
-                        patrolState = PatrolState.Waiting;
+                        PatrolFromMovingToWaiting();
                     }
                 }
                 break;
             case PatrolState.Waiting:
                 if (patrolWaitTime <= 0) {
                     patrolWaitTime = startPatrolWaitTime;
-
+                    statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", false);
                     patrolState = PatrolState.MovingToNextPoint;
                 } else {
                     patrolWaitTime -= Time.deltaTime;
+                    statusIcon.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((float) patrolWaitTime / (float) startPatrolWaitTime));
                 }
                 break;
         }
+    }
+
+    void PatrolFromMovingToWaiting() {
+        patrolState = patrolState = PatrolState.Waiting;
+        statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", true);
     }
 }
