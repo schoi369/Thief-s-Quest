@@ -18,6 +18,12 @@ public class PlayerActionController : MonoBehaviour
 
     public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost, disguiseMPCost; // Set in inspector
 
+    public Transform actionPoint;
+    public float sleepDaggerRange = 0.5f;
+    public LayerMask guardLayer;
+    public float sleepDaggerRate = 2f;
+    float nextSleepDaggerTime;
+
     void Awake() {
         instance = this;
     }
@@ -33,6 +39,15 @@ public class PlayerActionController : MonoBehaviour
     void Update()
     {
         ManageSkillSelect();
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            if (currentSkillNum == 0) {
+                if (Time.time >= nextSleepDaggerTime) {
+                    UseSleepDagger();
+                    nextSleepDaggerTime = Time.time + 1f / sleepDaggerRate;
+                }
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
             isScouting = !isScouting;
@@ -88,5 +103,25 @@ public class PlayerActionController : MonoBehaviour
             }
             HUDController.instance.UpdateSkillDisplay();
         }
+    }
+
+    void UseSleepDagger() {
+        // Play attack anim
+        actionPoint.GetComponent<Animator>().SetTrigger("sleepDagger");
+
+        // Detect enemies in range
+        Collider2D hitEnemy = Physics2D.OverlapCircle(actionPoint.position, sleepDaggerRange, guardLayer);
+
+        // Make them sleep
+        if (hitEnemy != null) {
+            Debug.Log(hitEnemy.name + " should fall asleep");
+        }
+    }
+
+    void OnDrawGizmosSelected() {
+        if (actionPoint == null) {
+            return;
+        }
+        Gizmos.DrawWireSphere(actionPoint.position, sleepDaggerRange);
     }
 }
