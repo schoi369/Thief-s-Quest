@@ -14,6 +14,10 @@ public class PlayerActionController : MonoBehaviour
     public bool isHiding;
     public bool isScouting;
 
+    public int currentSkillNum = 0;
+
+    public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost, disguiseMPCost; // Set in inspector
+
     void Awake() {
         instance = this;
     }
@@ -28,6 +32,8 @@ public class PlayerActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ManageSkillSelect();
+
         if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
             isScouting = !isScouting;
             Debug.Log("isScouting: " + isScouting);
@@ -62,6 +68,25 @@ public class PlayerActionController : MonoBehaviour
             case HidingPlace.HidingPlaceType.Barrel:
                 animator.SetBool("isHiding_Barrel", isHiding);
                 break;
+        }
+    }
+
+    void ManageSkillSelect() {
+        if (Input.GetKeyDown(KeyCode.U)) {
+            if (currentSkillNum == 0) {
+                currentSkillNum = 3;
+            } else {
+                currentSkillNum--;
+            }
+            HUDController.instance.UpdateSkillDisplay();
+        }
+        if (Input.GetKeyDown(KeyCode.O)) {
+            if (currentSkillNum == 3) {
+                currentSkillNum = 0;
+            } else {
+                currentSkillNum++;
+            }
+            HUDController.instance.UpdateSkillDisplay();
         }
     }
 }

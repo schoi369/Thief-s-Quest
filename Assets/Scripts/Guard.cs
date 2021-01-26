@@ -141,6 +141,7 @@ public class Guard : MonoBehaviour
                 if (detectMeasure >= SuspiciousMax) {
                     // Show that player is caught
                     // PlayerFound()
+                    Debug.Log("Player FOUND!");
                 }
                 break;
         }
@@ -162,10 +163,13 @@ public class Guard : MonoBehaviour
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", true);
     }
 
+
+
+
+
     void Patrol() {
         switch (patrolState) {
             case PatrolState.Standing:
-
                 break;
             case PatrolState.MovingToNextPoint:
                 if (movingRight) {
@@ -205,6 +209,10 @@ public class Guard : MonoBehaviour
         patrolState = PatrolState.Waiting;
         statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", true);
     }
+
+
+
+
 
     void Suspicious() {
         switch (suspiciousState) {
