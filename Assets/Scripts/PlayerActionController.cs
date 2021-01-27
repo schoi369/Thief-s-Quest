@@ -9,6 +9,10 @@ public class PlayerActionController : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
 
+    int maxMP;
+    int currentMP;
+    public int coinCount;
+
     public Transform hidingPlace;
 
     public bool isHiding;
@@ -16,7 +20,7 @@ public class PlayerActionController : MonoBehaviour
 
     public int currentSkillNum = 0;
 
-    public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost, disguiseMPCost; // Set in inspector
+    public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost; // Set in inspector
 
     public Transform actionPoint;
     public float sleepDaggerRange = 0.5f;
@@ -89,14 +93,14 @@ public class PlayerActionController : MonoBehaviour
     void ManageSkillSelect() {
         if (Input.GetKeyDown(KeyCode.U)) {
             if (currentSkillNum == 0) {
-                currentSkillNum = 3;
+                currentSkillNum = 2;
             } else {
                 currentSkillNum--;
             }
             HUDController.instance.UpdateSkillDisplay();
         }
         if (Input.GetKeyDown(KeyCode.O)) {
-            if (currentSkillNum == 3) {
+            if (currentSkillNum == 2) {
                 currentSkillNum = 0;
             } else {
                 currentSkillNum++;

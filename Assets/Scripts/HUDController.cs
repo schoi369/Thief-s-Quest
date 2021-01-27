@@ -8,9 +8,9 @@ public class HUDController : MonoBehaviour
     public static HUDController instance;
 
     public Image leftSkill, selectedSkill, rightSkill;
-    public Sprite sleepDagger, sleepDaggerSelected, coinThrow, coinThrowSelected, doppleganger, dopplegangerSelected, disguise, disguiseSelected;
+    public Sprite sleepDagger, sleepDaggerSelected, coinThrow, coinThrowSelected, doppleganger, dopplegangerSelected;
     public Text skillText;
-    string sleepDaggerText, coinThrowText, dopplegangerText, disguiseText;
+    string sleepDaggerText, coinThrowText, dopplegangerText;
 
     void Awake() {
         instance = this;
@@ -31,7 +31,7 @@ public class HUDController : MonoBehaviour
     public void UpdateSkillDisplay() {
         switch (PlayerActionController.instance.currentSkillNum) {
             case 0:
-                leftSkill.sprite = disguise;
+                leftSkill.sprite = doppleganger;
                 selectedSkill.sprite = sleepDaggerSelected;
                 rightSkill.sprite = coinThrow;
                 skillText.text = "Sleep Dagger\nMP " + PlayerActionController.instance.sleepDaggerMPCost;
@@ -45,14 +45,8 @@ public class HUDController : MonoBehaviour
             case 2:
                 leftSkill.sprite = coinThrow;
                 selectedSkill.sprite = dopplegangerSelected;
-                rightSkill.sprite = disguise;
-                skillText.text = "Doppleganger\nMP " + PlayerActionController.instance.dopplegangerMPCost;
-                break;
-            case 3:
-                leftSkill.sprite = doppleganger;
-                selectedSkill.sprite = disguiseSelected;
                 rightSkill.sprite = sleepDagger;
-                skillText.text = "Disguise\nMP " + PlayerActionController.instance.disguiseMPCost;
+                skillText.text = "Doppleganger\nMP " + PlayerActionController.instance.dopplegangerMPCost;
                 break;
         }
     }
