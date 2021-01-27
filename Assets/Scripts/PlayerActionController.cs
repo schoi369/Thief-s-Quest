@@ -121,8 +121,8 @@ public class PlayerActionController : MonoBehaviour
         // Make them sleep
         if (hitEnemy != null) {
             currentMP -= sleepDaggerMPCost;
-            Debug.Log(hitEnemy.name + " should fall asleep");
             HUDController.instance.UpdateMPDisplay();
+            hitEnemy.transform.GetComponent<Guard>().FallAsleep();
         }
     }
 

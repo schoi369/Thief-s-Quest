@@ -431,6 +431,7 @@ MonoBehaviour:
   rightPoint: {fileID: 658191346}
   startPatrolWaitTime: 3
   startSuspiciousWaitTime: 5
+  startSleepTime: 7
   detectMeter: {fileID: 1793522991}
   statusIcon: {fileID: 305088149}
 --- !u!1 &239343827
@@ -4293,7 +4294,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1634253376964645255, guid: 3ce7f1411d61ad94a909c7ccda5725dd,
+  m_Sprite: {fileID: -413191380445395782, guid: 747a6c04567344441bf689599c78b59f,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0

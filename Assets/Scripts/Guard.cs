@@ -40,6 +40,8 @@ public class Guard : MonoBehaviour
     public float startPatrolWaitTime; // Set in inspector
     float suspiciousWaitTime;
     public float startSuspiciousWaitTime; // Set in inspector
+    float sleepTime;
+    public float startSleepTime; // Set in inspector
 
     Vector2 suspiciousPosition;
 
@@ -82,6 +84,16 @@ public class Guard : MonoBehaviour
             case State.Suspicious:
                 detectMeter.color = new Color(240f / 255f, 79f / 255f, 120f/ 255f, 1f);
                 detectMeter.fillAmount = detectMeasure / SuspiciousMax;
+                break;
+            case State.Sleeping:
+                if (sleepTime <= 0) {
+                    sleepTime = startSleepTime;
+                    statusIcon.GetComponent<Animator>().SetBool("isSleeping", false);
+                    state = State.Patrol;
+                } else {
+                    sleepTime -= Time.deltaTime;
+                    statusIcon.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((float) sleepTime / (float) startSleepTime));
+                }
                 break;
         }
     }
@@ -150,6 +162,7 @@ public class Guard : MonoBehaviour
     void SetTimes() {
         patrolWaitTime = startPatrolWaitTime;
         suspiciousWaitTime = startSuspiciousWaitTime;
+        sleepTime = startSleepTime;
     }
 
     void BecomeSuspiciousState(Vector2 positionToCheck) {
@@ -278,6 +291,18 @@ public class Guard : MonoBehaviour
     void SuspiciousFromMovingToWaiting() {
         suspiciousState = SuspiciousState.Waiting;
         statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", true);        
+    }
+
+
+
+
+
+    public void FallAsleep() {
+        statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", false);
+        statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", false);
+        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+        statusIcon.GetComponent<Animator>().SetBool("isSleeping", true);
+        state = State.Sleeping;
     }
 
 }
