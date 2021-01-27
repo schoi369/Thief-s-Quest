@@ -23,9 +23,10 @@ public class Pickup : MonoBehaviour
         if (other.CompareTag("Player") && !isCollected) {
             if (isCoin) {
                 PlayerActionController.instance.coinCount++;
-                Debug.Log(PlayerActionController.instance.coinCount);
                 isCollected = true;
                 Destroy(gameObject);
+
+                HUDController.instance.UpdateCoinCountDisplay();
             }
         }
     }

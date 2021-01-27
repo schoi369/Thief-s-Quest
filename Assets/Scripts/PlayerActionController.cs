@@ -9,8 +9,8 @@ public class PlayerActionController : MonoBehaviour
     Rigidbody2D rb;
     Animator animator;
 
-    int maxMP;
-    int currentMP;
+    public int maxMP;
+    public int currentMP;
     public int coinCount;
 
     public Transform hidingPlace;
@@ -37,6 +37,8 @@ public class PlayerActionController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        currentMP = maxMP;
     }
 
     // Update is called once per frame
@@ -118,7 +120,9 @@ public class PlayerActionController : MonoBehaviour
 
         // Make them sleep
         if (hitEnemy != null) {
+            currentMP -= sleepDaggerMPCost;
             Debug.Log(hitEnemy.name + " should fall asleep");
+            HUDController.instance.UpdateMPDisplay();
         }
     }
 

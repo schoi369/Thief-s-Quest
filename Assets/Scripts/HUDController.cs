@@ -7,10 +7,19 @@ public class HUDController : MonoBehaviour
 {
     public static HUDController instance;
 
+    [Header("Skill Related")]
+    public Text skillText;
     public Image leftSkill, selectedSkill, rightSkill;
     public Sprite sleepDagger, sleepDaggerSelected, coinThrow, coinThrowSelected, doppleganger, dopplegangerSelected;
-    public Text skillText;
     string sleepDaggerText, coinThrowText, dopplegangerText;
+
+    [Header("MP Related")]
+    public GameObject fakeUIHolder;
+    public Image MPBar;
+    public Text MPText;
+
+    [Header("Coin Related")]
+    public Text coinCountText;
 
     void Awake() {
         instance = this;
@@ -20,6 +29,8 @@ public class HUDController : MonoBehaviour
     void Start()
     {
         UpdateSkillDisplay();
+        UpdateCoinCountDisplay();
+        UpdateMPDisplay();
     }
 
     // Update is called once per frame
@@ -49,5 +60,14 @@ public class HUDController : MonoBehaviour
                 skillText.text = "Doppleganger\nMP " + PlayerActionController.instance.dopplegangerMPCost;
                 break;
         }
+    }
+
+    public void UpdateMPDisplay() {
+        MPBar.fillAmount = (float) PlayerActionController.instance.currentMP / (float) PlayerActionController.instance.maxMP;
+        MPText.text = PlayerActionController.instance.currentMP.ToString();
+    }
+
+    public void UpdateCoinCountDisplay() {
+        coinCountText.text = PlayerActionController.instance.coinCount.ToString();
     }
 }
