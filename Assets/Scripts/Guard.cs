@@ -7,7 +7,7 @@ public class Guard : MonoBehaviour
 {
     Rigidbody2D rb;
     public float moveSpeed;
-    bool facingRight;
+    public bool facingRight;
 
     [Header("Detection Related")]
     public bool playerInVision;
@@ -24,7 +24,7 @@ public class Guard : MonoBehaviour
         Patrol, Suspicious, Alert, Sleeping
     }
     public enum PatrolState {
-        Standing, Waiting, MovingToNextPoint
+        Standing, Waiting, MovingToNextPoint, Returning
     }
     public enum SuspiciousState {
         MovingToSuspiciousPosition, Waiting, ReturningToPoint
@@ -33,8 +33,10 @@ public class Guard : MonoBehaviour
     public State state;
     public PatrolState patrolState;
     public SuspiciousState suspiciousState;
+    public bool isStandingGuard;
 
-    public Transform leftPoint, rightPoint;
+    public Transform leftPoint, rightPoint, originPoint;
+    bool facingRightAtStart;
     bool movingRight;
     float patrolWaitTime;
     public float startPatrolWaitTime; // Set in inspector
@@ -63,9 +65,12 @@ public class Guard : MonoBehaviour
 
         SetTimes();
 
+        facingRightAtStart = facingRight;
+
         // Release move points
         leftPoint.parent = null;
         rightPoint.parent = null;
+        originPoint.parent = null;
 
         // Set number of itemCounts randomly (how many things a player can steal from this enemy)
         int randomNum = Random.Range(1, 100);
@@ -187,6 +192,7 @@ public class Guard : MonoBehaviour
         suspiciousPosition = positionToCheck;
         
         statusIcon.GetComponent<SpriteRenderer>().color = Color.white;
+        statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", false);
         statusIcon.GetComponent<Animator>().SetTrigger("isSuspicious");
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", true);
     }
@@ -230,6 +236,23 @@ public class Guard : MonoBehaviour
                     statusIcon.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((float) patrolWaitTime / (float) startPatrolWaitTime));
                 }
                 break;
+            case PatrolState.Returning:
+                if (suspiciousPosition.x > originPoint.position.x) {
+                    facingRight = false;
+                    rb.MovePosition(rb.position - new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
+                    if (transform.position.x < originPoint.position.x) {
+                        patrolState = PatrolState.Standing;
+                        facingRight = facingRightAtStart;
+                    }
+                } else if (suspiciousPosition.x <= originPoint.position.x) {
+                    facingRight = true;
+                    rb.MovePosition(rb.position + new Vector2(moveSpeed * Time.fixedDeltaTime, 0));
+                    if (transform.position.x > originPoint.position.x) {
+                        patrolState = PatrolState.Standing;
+                        facingRight = facingRightAtStart;
+                    }
+                }
+                break;
         }
     }
 
@@ -258,47 +281,57 @@ public class Guard : MonoBehaviour
                     suspiciousState = SuspiciousState.ReturningToPoint;
                 } else {
                     suspiciousWaitTime -= Time.deltaTime;
+                    statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
                     statusIcon.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, ((float) suspiciousWaitTime / (float) startSuspiciousWaitTime));
                 }
                 break;
             case SuspiciousState.ReturningToPoint:
-                if (suspiciousPosition.x < leftPoint.position.x) {
-                    facingRight = true;
-                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                    if (rb.position.x > rightPoint.position.x) {
-                        state = State.Patrol;
-                        patrolState = PatrolState.MovingToNextPoint;
-                        patrolWaitTime = startPatrolWaitTime;
-                        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
-                    }
-                } else if (suspiciousPosition.x >= leftPoint.position.x && suspiciousPosition.x <= rightPoint.position.x) {
-                    if (facingRight) {
-                        rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                        if (rb.position.x > rightPoint.position.x) {
-                            state = State.Patrol;
-                            patrolState = PatrolState.MovingToNextPoint;
-                            patrolWaitTime = startPatrolWaitTime;
-                            statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
-                        }
-                    } else {
-                        rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                        if (rb.position.x < leftPoint.position.x) {
-                            state = State.Patrol;
-                            patrolState = PatrolState.MovingToNextPoint;
-                            patrolWaitTime = startPatrolWaitTime;
-                            statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
-                        }
-                    }
-                } else if (suspiciousPosition.x > rightPoint.position.x) {
-                    facingRight = false;
-                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                    if (rb.position.x < leftPoint.position.x) {
-                        state = State.Patrol;
-                        patrolState = PatrolState.MovingToNextPoint;
-                        patrolWaitTime = startPatrolWaitTime;
-                        statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
-                    }
+                if (isStandingGuard) {
+                    state = State.Patrol;
+                    patrolState = PatrolState.Returning;  
+                    patrolWaitTime = startPatrolWaitTime;
+                } else {
+                    state = State.Patrol;
+                    patrolState = PatrolState.MovingToNextPoint;
+                    patrolWaitTime = startPatrolWaitTime;
                 }
+                // if (suspiciousPosition.x < leftPoint.position.x) {
+                //     facingRight = true;
+                //     rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //     if (rb.position.x > rightPoint.position.x) {
+                //         state = State.Patrol;
+                //         patrolState = PatrolState.MovingToNextPoint;
+                //         patrolWaitTime = startPatrolWaitTime;
+                //         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                //     }
+                // } else if (suspiciousPosition.x >= leftPoint.position.x && suspiciousPosition.x <= rightPoint.position.x) {
+                //     if (facingRight) {
+                //         rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //         if (rb.position.x > rightPoint.position.x) {
+                //             state = State.Patrol;
+                //             patrolState = PatrolState.MovingToNextPoint;
+                //             patrolWaitTime = startPatrolWaitTime;
+                //             statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                //         }
+                //     } else {
+                //         rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //         if (rb.position.x < leftPoint.position.x) {
+                //             state = State.Patrol;
+                //             patrolState = PatrolState.MovingToNextPoint;
+                //             patrolWaitTime = startPatrolWaitTime;
+                //             statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                //         }
+                //     }
+                // } else if (suspiciousPosition.x > rightPoint.position.x) {
+                //     facingRight = false;
+                //     rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //     if (rb.position.x < leftPoint.position.x) {
+                //         state = State.Patrol;
+                //         patrolState = PatrolState.MovingToNextPoint;
+                //         patrolWaitTime = startPatrolWaitTime;
+                //         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
+                //     }
+                // }
                 break;
         }
     }
@@ -317,6 +350,8 @@ public class Guard : MonoBehaviour
         statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", false);
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
         statusIcon.GetComponent<Animator>().SetBool("isSleeping", true);
+        patrolWaitTime = startPatrolWaitTime;
+        suspiciousWaitTime = startSuspiciousWaitTime;
         state = State.Sleeping;
     }
 
