@@ -151,7 +151,9 @@ public class Guard : MonoBehaviour
             if (state == State.Patrol && hitInfo.collider.CompareTag("Doppelganger")) {
                 BecomeSuspiciousState(hitInfo.point);
             }
-            if (hitInfo.collider.CompareTag("Player") && !PlayerActionController.instance.isHiding) {
+            if (hitInfo.collider.CompareTag("Player")
+                && !PlayerActionController.instance.isHiding
+                && !PlayerActionController.instance.isDisguising) {
                 playerInVision = true;
             } else {
                 playerInVision = false;

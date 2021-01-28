@@ -32,6 +32,9 @@ public class PlayerActionController : MonoBehaviour
     public GameObject doppelganger;
     float nextSleepDaggerTime;
     float nextDoppelgangerTime;
+    float nextDisguiseTime;
+    public float disguiseLength = 3f;
+    public bool isDisguising;
 
     void Awake() {
         instance = this;
@@ -66,6 +69,12 @@ public class PlayerActionController : MonoBehaviour
                 if (Time.time >= nextDoppelgangerTime) {
                     UseDoppelganger();
                     nextDoppelgangerTime = Time.time + 1f;
+                }
+            }
+            if (currentSkillNum == 2) {
+                if (Time.time >= nextDisguiseTime && PlayerMovementController.instance.isGrounded) {
+                    UseDisguise();
+                    nextDisguiseTime = Time.time + disguiseLength;
                 }
             }
         }
@@ -196,6 +205,22 @@ public class PlayerActionController : MonoBehaviour
 
         // Manage bools
         canMakeAction = true;
+    }
+
+    void UseDisguise() {
+        StartCoroutine(DisguiseCo());
+    }
+
+    IEnumerator DisguiseCo() {
+        isDisguising = true;
+        canMakeAction = false;
+        animator.SetBool("isDisguising", true);
+
+        yield return new WaitForSeconds(disguiseLength);
+
+        isDisguising = false;
+        canMakeAction = true;
+        animator.SetBool("isDisguising", false);
     }
 
     void OnDrawGizmosSelected() {
