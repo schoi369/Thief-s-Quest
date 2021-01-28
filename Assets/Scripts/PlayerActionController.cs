@@ -20,7 +20,7 @@ public class PlayerActionController : MonoBehaviour
 
     public int currentSkillNum = 0;
 
-    public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost; // Set in inspector
+    public int sleepDaggerMPCost, doppelgangerMPCost, disguiseMPCost; // Set in inspector
 
     public Transform actionPoint;
     public bool isStealing, isUsingSleepDagger;
@@ -29,7 +29,9 @@ public class PlayerActionController : MonoBehaviour
     public float sleepDaggerRange;
     public LayerMask guardLayer;
     float sleepDaggerRate = 2f;
+    public GameObject doppelganger;
     float nextSleepDaggerTime;
+    float nextDoppelgangerTime;
 
     void Awake() {
         instance = this;
@@ -58,6 +60,12 @@ public class PlayerActionController : MonoBehaviour
                 if (Time.time >= nextSleepDaggerTime) {
                     UseSleepDagger();
                     nextSleepDaggerTime = Time.time + 1f / sleepDaggerRate;
+                }
+            }
+            if (currentSkillNum == 1) {
+                if (Time.time >= nextDoppelgangerTime) {
+                    UseDoppelganger();
+                    nextDoppelgangerTime = Time.time + 1f;
                 }
             }
         }
@@ -168,6 +176,25 @@ public class PlayerActionController : MonoBehaviour
 
         // Manage bools
         isUsingSleepDagger = false;
+        canMakeAction = true;
+    }
+
+    void UseDoppelganger() {
+        StartCoroutine(DoppelgangerCo());
+    }
+
+    IEnumerator DoppelgangerCo() {
+        // Manage bools
+        canMakeAction = false;
+
+        // Instantiate Doppelganger
+        GameObject doppelgangerPrefab = Instantiate(doppelganger, actionPoint.position, transform.rotation);
+        if (!PlayerMovementController.instance.facingRight) {
+            doppelgangerPrefab.transform.localScale = new Vector3(-1, 1, 1);
+        }
+        yield return new WaitForSeconds(.3f);
+
+        // Manage bools
         canMakeAction = true;
     }
 

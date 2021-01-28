@@ -436,6 +436,7 @@ MonoBehaviour:
   statusIcon: {fileID: 305088149}
   stealEffect: {fileID: 5610527081522538831, guid: 673f89148cc3f8543b117e7b0bd6cb7a,
     type: 3}
+  itemCount: 0
   coin: {fileID: 7357533248037529441, guid: cc39dc7b94e11544e9157985d76b236f, type: 3}
   potion: {fileID: 303789949698667490, guid: 25a472cba80b04549a1a708cdc728fe1, type: 3}
 --- !u!1 &239343827
@@ -581,6 +582,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   moveSpeed: 5
   jumpForce: 14
+  facingRight: 0
   isGrounded: 0
   groundCheckPoint: {fileID: 1354217488}
   groundLayerMask:
@@ -630,8 +632,8 @@ MonoBehaviour:
   isScouting: 0
   currentSkillNum: 0
   sleepDaggerMPCost: 1
-  coinThrowMPCost: 2
-  dopplegangerMPCost: 3
+  doppelgangerMPCost: 2
+  disguiseMPCost: 3
   actionPoint: {fileID: 1718823649}
   isStealing: 0
   isUsingSleepDagger: 0
@@ -641,6 +643,8 @@ MonoBehaviour:
   guardLayer:
     serializedVersion: 2
     m_Bits: 2048
+  doppelganger: {fileID: 8115818590526229335, guid: 57831d1525114e84e8d43ac6f1856d2b,
+    type: 3}
 --- !u!4 &275913491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8502283715174010135, guid: 6351df1b9d9756b47b4d59e18e3ef617,
@@ -1323,13 +1327,13 @@ MonoBehaviour:
     type: 3}
   sleepDaggerSelected: {fileID: -4352469251379083881, guid: e6bfd939d70e6094390b9ef0808eedad,
     type: 3}
-  coinThrow: {fileID: -448064427211311330, guid: 6d3f654a05b62a6488a019cdcc5bbb23,
+  doppelganger: {fileID: -413191380445395782, guid: 747a6c04567344441bf689599c78b59f,
     type: 3}
-  coinThrowSelected: {fileID: -1423946270303633552, guid: 6d3f654a05b62a6488a019cdcc5bbb23,
+  doppelgangerSelected: {fileID: -252328321447015718, guid: 747a6c04567344441bf689599c78b59f,
     type: 3}
-  doppleganger: {fileID: -413191380445395782, guid: 747a6c04567344441bf689599c78b59f,
+  disguise: {fileID: 1634253376964645255, guid: 3ce7f1411d61ad94a909c7ccda5725dd,
     type: 3}
-  dopplegangerSelected: {fileID: -252328321447015718, guid: 747a6c04567344441bf689599c78b59f,
+  disguiseSelected: {fileID: -5873719093928666843, guid: 3ce7f1411d61ad94a909c7ccda5725dd,
     type: 3}
   fakeUIHolder: {fileID: 1846238353}
   MPBar: {fileID: 1589148190}
@@ -3818,7 +3822,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -448064427211311330, guid: 6d3f654a05b62a6488a019cdcc5bbb23,
+  m_Sprite: {fileID: -413191380445395782, guid: 747a6c04567344441bf689599c78b59f,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -4146,7 +4150,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -413191380445395782, guid: 747a6c04567344441bf689599c78b59f,
+  m_Sprite: {fileID: 1634253376964645255, guid: 3ce7f1411d61ad94a909c7ccda5725dd,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0

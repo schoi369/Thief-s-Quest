@@ -13,7 +13,7 @@ public class PlayerMovementController : MonoBehaviour
     public float moveSpeed;
     public float jumpForce;
 
-    bool facingRight;
+    public bool facingRight;
 
     public bool isGrounded;
     public Transform groundCheckPoint;

@@ -10,8 +10,7 @@ public class HUDController : MonoBehaviour
     [Header("Skill Related")]
     public Text skillText;
     public Image leftSkill, selectedSkill, rightSkill;
-    public Sprite sleepDagger, sleepDaggerSelected, coinThrow, coinThrowSelected, doppleganger, dopplegangerSelected;
-    string sleepDaggerText, coinThrowText, dopplegangerText;
+    public Sprite sleepDagger, sleepDaggerSelected, doppelganger, doppelgangerSelected, disguise, disguiseSelected;
 
     [Header("MP Related")]
     public GameObject fakeUIHolder;
@@ -42,22 +41,22 @@ public class HUDController : MonoBehaviour
     public void UpdateSkillDisplay() {
         switch (PlayerActionController.instance.currentSkillNum) {
             case 0:
-                leftSkill.sprite = doppleganger;
+                leftSkill.sprite = disguise;
                 selectedSkill.sprite = sleepDaggerSelected;
-                rightSkill.sprite = coinThrow;
+                rightSkill.sprite = doppelganger;
                 skillText.text = "Sleep Dagger\nMP " + PlayerActionController.instance.sleepDaggerMPCost;
                 break;
             case 1:
                 leftSkill.sprite = sleepDagger;
-                selectedSkill.sprite = coinThrowSelected;
-                rightSkill.sprite = doppleganger;
-                skillText.text = "Coin Throw\nMP " + PlayerActionController.instance.coinThrowMPCost;
+                selectedSkill.sprite = doppelgangerSelected;
+                rightSkill.sprite = disguise;
+                skillText.text = "Doppelganger\nMP " + PlayerActionController.instance.doppelgangerMPCost;
                 break;
             case 2:
-                leftSkill.sprite = coinThrow;
-                selectedSkill.sprite = dopplegangerSelected;
+                leftSkill.sprite = doppelganger;
+                selectedSkill.sprite = disguiseSelected;
                 rightSkill.sprite = sleepDagger;
-                skillText.text = "Doppleganger\nMP " + PlayerActionController.instance.dopplegangerMPCost;
+                skillText.text = "Disguise\nMP " + PlayerActionController.instance.disguiseMPCost;
                 break;
         }
     }

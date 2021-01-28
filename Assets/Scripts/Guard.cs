@@ -139,15 +139,14 @@ public class Guard : MonoBehaviour
     }
 
     void ManagePlayerDetection() {
-        if (PlayerActionController.instance.isHiding) {
-            playerInVision = false;
-            return;
-        }
         // Shoots ray, checking objects in Player, Ground, Obstacle layer
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, lookDirection, viewDistance, playerAndObstacleLayerMask);
         if (hitInfo.collider != null) {
             Debug.DrawLine(transform.position, hitInfo.point, Color.red);
-            if (hitInfo.collider.CompareTag("Player")) {
+            if (state == State.Patrol && hitInfo.collider.CompareTag("Doppelganger")) {
+                BecomeSuspiciousState(hitInfo.point);
+            }
+            if (hitInfo.collider.CompareTag("Player") && !PlayerActionController.instance.isHiding) {
                 playerInVision = true;
             } else {
                 playerInVision = false;
