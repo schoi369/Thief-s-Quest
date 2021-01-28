@@ -114,7 +114,8 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     void ManageCanMove() {
-        if (PlayerActionController.instance.isHiding || PlayerActionController.instance.isScouting) {
+        if (PlayerActionController.instance.isHiding || PlayerActionController.instance.isScouting
+            || !PlayerActionController.instance.canMakeAction) {
             canMove = false;
         } else {
             canMove = true;

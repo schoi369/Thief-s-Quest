@@ -23,9 +23,12 @@ public class PlayerActionController : MonoBehaviour
     public int sleepDaggerMPCost, coinThrowMPCost, dopplegangerMPCost; // Set in inspector
 
     public Transform actionPoint;
-    public float sleepDaggerRange = 0.5f;
+    public bool isStealing, isUsingSleepDagger;
+    public bool canMakeAction = true;
+    public float stealRange;
+    public float sleepDaggerRange;
     public LayerMask guardLayer;
-    public float sleepDaggerRate = 2f;
+    float sleepDaggerRate = 2f;
     float nextSleepDaggerTime;
 
     void Awake() {
@@ -46,7 +49,11 @@ public class PlayerActionController : MonoBehaviour
     {
         ManageSkillSelect();
 
-        if (Input.GetKeyDown(KeyCode.I)) {
+        if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
+            Steal();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) && canMakeAction) {
             if (currentSkillNum == 0) {
                 if (Time.time >= nextSleepDaggerTime) {
                     UseSleepDagger();
@@ -92,6 +99,29 @@ public class PlayerActionController : MonoBehaviour
         }
     }
 
+    void Steal() {
+        StartCoroutine(StealCo());
+    }
+
+    IEnumerator StealCo() {
+        // Manage bools
+        isStealing = true;
+        canMakeAction = false;
+
+        Collider2D hitEnemy = Physics2D.OverlapCircle(actionPoint.position, stealRange, guardLayer);
+        if (hitEnemy != null) {
+            hitEnemy.GetComponent<Guard>().DropItem();
+            // Wait
+            yield return new WaitForSeconds(.35f);
+        } else {
+            yield return null;
+        }
+
+        // Manage bools
+        isStealing = false;
+        canMakeAction = true;
+    }
+
     void ManageSkillSelect() {
         if (Input.GetKeyDown(KeyCode.U)) {
             if (currentSkillNum == 0) {
@@ -112,6 +142,14 @@ public class PlayerActionController : MonoBehaviour
     }
 
     void UseSleepDagger() {
+        StartCoroutine(SleepDaggerCo());
+    }
+
+    IEnumerator SleepDaggerCo() {
+        // Manage bools
+        isUsingSleepDagger = true;
+        canMakeAction = false;
+
         // Play attack anim
         actionPoint.GetComponent<Animator>().SetTrigger("sleepDagger");
 
@@ -124,12 +162,22 @@ public class PlayerActionController : MonoBehaviour
             HUDController.instance.UpdateMPDisplay();
             hitEnemy.transform.GetComponent<Guard>().FallAsleep();
         }
+        
+        // Wait
+        yield return new WaitForSeconds(0.267f);
+
+        // Manage bools
+        isUsingSleepDagger = false;
+        canMakeAction = true;
     }
 
     void OnDrawGizmosSelected() {
         if (actionPoint == null) {
             return;
         }
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(actionPoint.position, stealRange);
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(actionPoint.position, sleepDaggerRange);
     }
 }

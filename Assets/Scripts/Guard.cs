@@ -49,6 +49,12 @@ public class Guard : MonoBehaviour
     public Image detectMeter;
     public Transform statusIcon;
 
+    [Header("Others")]
+    public GameObject stealEffect;
+    public int itemCount;
+    public GameObject coin;
+    public GameObject potion;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +66,16 @@ public class Guard : MonoBehaviour
         // Release move points
         leftPoint.parent = null;
         rightPoint.parent = null;
+
+        // Set number of itemCounts randomly (how many things a player can steal from this enemy)
+        int randomNum = Random.Range(1, 100);
+        if (randomNum <= 10) {
+            itemCount = 1;
+        } else if (randomNum <= 50) {
+            itemCount = 2;
+        } else {
+            itemCount = 3;
+        }
     }
 
     // Update is called once per frame
@@ -69,7 +85,7 @@ public class Guard : MonoBehaviour
         ManagePlayerDetection();
         ManageStateChangeBasedOnDetectMeasure();
 
-        if (playerInVision) {
+        if (playerInVision && state != State.Sleeping) {
             detectMeasure += detectMeasureIncrease * Time.deltaTime;
         } else {
             detectMeasure -= detectMeasureDecrese * Time.deltaTime;
@@ -303,6 +319,19 @@ public class Guard : MonoBehaviour
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
         statusIcon.GetComponent<Animator>().SetBool("isSleeping", true);
         state = State.Sleeping;
+    }
+
+    public void DropItem() {
+        Instantiate(stealEffect, PlayerActionController.instance.actionPoint.position, transform.rotation);
+        if (itemCount > 0) {
+            itemCount--;
+            int randomNum = Random.Range(1, 100);
+            if (randomNum <= 60) {
+                Instantiate(coin, PlayerActionController.instance.actionPoint.position, transform.rotation);        
+            } else {
+                Instantiate(potion, PlayerActionController.instance.actionPoint.position, transform.rotation);
+            }
+        }
     }
 
 }
