@@ -100,8 +100,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.05}
-  m_Size: {x: 0.5, y: 0.9}
-  m_Direction: 0
+  m_Size: {x: 1.5, y: 0.9}
+  m_Direction: 1
 --- !u!95 &8115818590526229331
 Animator:
   serializedVersion: 3
@@ -155,3 +155,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 4.5
+  countdownStarted: 0

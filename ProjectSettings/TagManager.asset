@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Doppelganger
+  - Guard
   layers:
   - Default
   - TransparentFX

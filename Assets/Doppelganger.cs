@@ -5,7 +5,7 @@ using UnityEngine;
 public class Doppelganger : MonoBehaviour
 {
     public float lifeTime;
-    bool countdownStarted;
+    public bool countdownStarted = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,9 @@ public class Doppelganger : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        countdownStarted = true;
+        if (other.CompareTag("Guard")) {
+            countdownStarted = true;
+        }
     }
 
 
