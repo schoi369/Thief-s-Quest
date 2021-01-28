@@ -14,6 +14,7 @@ public class PlayerActionController : MonoBehaviour
     public int coinCount;
 
     public Transform hidingPlace;
+    public Transform movableDoor;
 
     public bool isHiding;
     public bool isScouting;
@@ -58,7 +59,7 @@ public class PlayerActionController : MonoBehaviour
             Steal();
         }
 
-        if (Input.GetKeyDown(KeyCode.I) && canMakeAction) {
+        if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded) {
             if (currentSkillNum == 0) {
                 if (Time.time >= nextSleepDaggerTime) {
                     UseSleepDagger();
@@ -72,7 +73,7 @@ public class PlayerActionController : MonoBehaviour
                 }
             }
             if (currentSkillNum == 2) {
-                if (Time.time >= nextDisguiseTime && PlayerMovementController.instance.isGrounded) {
+                if (Time.time >= nextDisguiseTime) {
                     UseDisguise();
                     nextDisguiseTime = Time.time + disguiseLength;
                 }
@@ -86,6 +87,7 @@ public class PlayerActionController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L)) {
             HideUnhide();
+            OpenDoor();
         }
     }
 
@@ -113,6 +115,17 @@ public class PlayerActionController : MonoBehaviour
             case HidingPlace.HidingPlaceType.Barrel:
                 animator.SetBool("isHiding_Barrel", isHiding);
                 break;
+        }
+    }
+
+    void OpenDoor() {
+        if (movableDoor == null || Vector2.Distance(transform.position, movableDoor.position) >= 1.8f) {
+            return;
+        }
+        if (!movableDoor.GetComponent<DoorController>().isOpen) {
+            // Open the door
+            movableDoor.GetComponent<DoorController>().Open();
+            movableDoor.GetComponent<DoorController>().KeyCanvas.SetActive(false);
         }
     }
 
