@@ -61,41 +61,43 @@ public class PlayerActionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ManageSkillSelect();
+        if (!PauseMenu.instance.isPaused) {
+            ManageSkillSelect();
 
-        if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
-            Steal();
-        }
+            if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
+                Steal();
+            }
 
-        if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded) {
-            if (currentSkillNum == 0) {
-                if (Time.time >= nextSleepDaggerTime) {
-                    UseSleepDagger();
-                    nextSleepDaggerTime = Time.time + 1f / sleepDaggerRate;
+            if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded) {
+                if (currentSkillNum == 0) {
+                    if (Time.time >= nextSleepDaggerTime) {
+                        UseSleepDagger();
+                        nextSleepDaggerTime = Time.time + 1f / sleepDaggerRate;
+                    }
+                }
+                if (currentSkillNum == 1) {
+                    if (Time.time >= nextDoppelgangerTime) {
+                        UseDoppelganger();
+                        nextDoppelgangerTime = Time.time + 1f;
+                    }
+                }
+                if (currentSkillNum == 2) {
+                    if (Time.time >= nextDisguiseTime) {
+                        UseDisguise();
+                        nextDisguiseTime = Time.time + disguiseLength;
+                    }
                 }
             }
-            if (currentSkillNum == 1) {
-                if (Time.time >= nextDoppelgangerTime) {
-                    UseDoppelganger();
-                    nextDoppelgangerTime = Time.time + 1f;
-                }
-            }
-            if (currentSkillNum == 2) {
-                if (Time.time >= nextDisguiseTime) {
-                    UseDisguise();
-                    nextDisguiseTime = Time.time + disguiseLength;
-                }
-            }
-        }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
-            isScouting = !isScouting;
-            Debug.Log("isScouting: " + isScouting);
-        }
+            if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
+                isScouting = !isScouting;
+                Debug.Log("isScouting: " + isScouting);
+            }
 
-        if (Input.GetKeyDown(KeyCode.L)) {
-            HideUnhide();
-            OpenDoor();
+            if (Input.GetKeyDown(KeyCode.L)) {
+                HideUnhide();
+                OpenDoor();
+            }
         }
     }
 
