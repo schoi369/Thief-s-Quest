@@ -55,6 +55,11 @@ public class PlayerActionController : MonoBehaviour
     {
         ManageSkillSelect();
 
+        if (Input.GetKeyDown(KeyCode.V)) {
+            maxMP += 5;
+            HUDController.instance.UpdateMPDisplay();
+        }
+
         if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
             Steal();
         }
