@@ -30,12 +30,20 @@ public class PlayerActionController : MonoBehaviour
     public float sleepDaggerRange;
     public LayerMask guardLayer;
     float sleepDaggerRate = 2f;
+    float sleepDaggerLength = 7f;
     public GameObject doppelganger;
     float nextSleepDaggerTime;
     float nextDoppelgangerTime;
     float nextDisguiseTime;
     public float disguiseLength = 3f;
     public bool isDisguising;
+
+    [Header("Item related values")]
+    public int maxMPIncrease;
+    public float sleepDaggerTimeIncrease;
+    public int doppelgangerCostDecrease;
+    public float disguiseTimeIncrease;
+    public int itemPrice;
 
     void Awake() {
         instance = this;
@@ -54,11 +62,6 @@ public class PlayerActionController : MonoBehaviour
     void Update()
     {
         ManageSkillSelect();
-
-        if (Input.GetKeyDown(KeyCode.V)) {
-            maxMP += 5;
-            HUDController.instance.UpdateMPDisplay();
-        }
 
         if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
             Steal();
@@ -195,7 +198,7 @@ public class PlayerActionController : MonoBehaviour
         if (hitEnemy != null) {
             currentMP -= sleepDaggerMPCost;
             HUDController.instance.UpdateMPDisplay();
-            hitEnemy.transform.GetComponent<Guard>().FallAsleep();
+            hitEnemy.transform.GetComponent<Guard>().FallAsleep(sleepDaggerLength);
         }
         
         // Wait
@@ -249,5 +252,33 @@ public class PlayerActionController : MonoBehaviour
         Gizmos.DrawWireSphere(actionPoint.position, stealRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(actionPoint.position, sleepDaggerRange);
+    }
+
+    public void BuyRingOfMana() {
+        if (coinCount > itemPrice) {
+            maxMP += maxMPIncrease;
+            coinCount -= itemPrice;
+        }
+    }
+
+    public void BuyHypnosCharm() {
+        if (coinCount > itemPrice) {
+            sleepDaggerLength += sleepDaggerTimeIncrease;
+            coinCount -= itemPrice;
+        }
+    }
+
+    public void BuyShadowEarring() {
+        if (coinCount > itemPrice) {
+            doppelgangerMPCost -= doppelgangerCostDecrease;
+            coinCount -= itemPrice;
+        }
+    }
+
+    public void BuyMaskofArsene() {
+        if (coinCount > itemPrice) {
+            disguiseLength += disguiseTimeIncrease;
+            coinCount -= itemPrice;
+        }
     }
 }

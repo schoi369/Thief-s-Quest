@@ -43,7 +43,7 @@ public class Guard : MonoBehaviour
     float suspiciousWaitTime;
     public float startSuspiciousWaitTime; // Set in inspector
     float sleepTime;
-    public float startSleepTime; // Set in inspector
+    float startSleepTime;
 
     Vector2 suspiciousPosition;
 
@@ -347,7 +347,7 @@ public class Guard : MonoBehaviour
 
 
 
-    public void FallAsleep() {
+    public void FallAsleep(float sleepLength) {
         statusIcon.GetComponent<Animator>().SetBool("patrolWaiting", false);
         statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", false);
         statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);
@@ -355,6 +355,8 @@ public class Guard : MonoBehaviour
         patrolWaitTime = startPatrolWaitTime;
         suspiciousWaitTime = startSuspiciousWaitTime;
         state = State.Sleeping;
+        sleepTime = sleepLength;
+        startSleepTime = sleepLength;
     }
 
     public void DropItem() {
