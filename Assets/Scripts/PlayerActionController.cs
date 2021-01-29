@@ -15,6 +15,7 @@ public class PlayerActionController : MonoBehaviour
 
     public Transform hidingPlace;
     public Transform movableDoor;
+    public Transform shopIcon;
 
     public bool isHiding;
     public bool isScouting;
@@ -95,8 +96,39 @@ public class PlayerActionController : MonoBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.L)) {
-                HideUnhide();
-                OpenDoor();
+                if (hidingPlace == null && movableDoor == null) {
+                    Shop();
+                } else if (movableDoor == null && shopIcon == null) {
+                    HideUnhide();
+                } else if (shopIcon == null && hidingPlace == null) {
+                    OpenDoor();
+                } else if (hidingPlace == null) {
+                    if (Vector2.Distance(transform.position, movableDoor.position) <= Vector2.Distance(transform.position, shopIcon.position)) {
+                        OpenDoor();
+                    } else {
+                        Shop();
+                    }
+                } else if (movableDoor == null) {
+                    if (Vector2.Distance(transform.position, shopIcon.position) <= Vector2.Distance(transform.position, hidingPlace.position)) {
+                        Shop();
+                    } else {
+                        HideUnhide();
+                    }
+                } else if (shopIcon == null) {
+                    if (Vector2.Distance(transform.position, movableDoor.position) <= Vector2.Distance(transform.position, hidingPlace.position)) {
+                        OpenDoor();
+                    } else {
+                        HideUnhide();
+                    }
+                } else {
+                    if (Vector2.Distance(transform.position, hidingPlace.position) < Mathf.Min(Vector2.Distance(transform.position, movableDoor.position), Vector2.Distance(transform.position, shopIcon.position))) {
+                        HideUnhide();
+                    } else if (Vector2.Distance(transform.position, movableDoor.position) < Mathf.Min(Vector2.Distance(transform.position, hidingPlace.position), Vector2.Distance(transform.position, shopIcon.position))) {
+                        OpenDoor();
+                    } else if (Vector2.Distance(transform.position, shopIcon.position) < Mathf.Min(Vector2.Distance(transform.position, hidingPlace.position), Vector2.Distance(transform.position, movableDoor.position))) {
+                        Shop();
+                    }
+                }
             }
         }
     }
@@ -137,6 +169,10 @@ public class PlayerActionController : MonoBehaviour
             movableDoor.GetComponent<DoorController>().Open();
             movableDoor.GetComponent<DoorController>().KeyCanvas.SetActive(false);
         }
+    }
+
+    void Shop() {
+        ShopManager.instance.OpenCloseShopScreen();
     }
 
     void Steal() {
@@ -260,6 +296,10 @@ public class PlayerActionController : MonoBehaviour
         if (coinCount > itemPrice) {
             maxMP += maxMPIncrease;
             coinCount -= itemPrice;
+            HUDController.instance.UpdateMPDisplay();
+            ShopManager.instance.shopText.text = "Got it!";
+        } else {
+            ShopManager.instance.shopText.text = "Not enough coins!";
         }
     }
 
@@ -267,6 +307,9 @@ public class PlayerActionController : MonoBehaviour
         if (coinCount > itemPrice) {
             sleepDaggerLength += sleepDaggerTimeIncrease;
             coinCount -= itemPrice;
+            ShopManager.instance.shopText.text = "Got it!";
+        } else {
+            ShopManager.instance.shopText.text = "Not enough coins!";
         }
     }
 
@@ -274,6 +317,9 @@ public class PlayerActionController : MonoBehaviour
         if (coinCount > itemPrice) {
             doppelgangerMPCost -= doppelgangerCostDecrease;
             coinCount -= itemPrice;
+            ShopManager.instance.shopText.text = "Got it!";
+        } else {
+            ShopManager.instance.shopText.text = "Not enough coins!";
         }
     }
 
@@ -281,6 +327,9 @@ public class PlayerActionController : MonoBehaviour
         if (coinCount > itemPrice) {
             disguiseLength += disguiseTimeIncrease;
             coinCount -= itemPrice;
+            ShopManager.instance.shopText.text = "Got it!";
+        } else {
+            ShopManager.instance.shopText.text = "Not enough coins!";
         }
     }
 }
