@@ -11,6 +11,10 @@ public class CameraController : MonoBehaviour
     float verticalViewDistance;
     bool hasReturned;
     
+    void Awake() {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {

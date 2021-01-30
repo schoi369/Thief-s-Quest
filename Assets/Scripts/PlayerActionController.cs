@@ -31,10 +31,12 @@ public class PlayerActionController : MonoBehaviour
     public float sleepDaggerRange;
     public LayerMask guardLayer;
     float sleepDaggerRate = 2f;
-    float sleepDaggerLength = 7f;
+    public float sleepDaggerLength = 7f;
     public GameObject doppelganger;
+    Vector2 doppelgangerPosition;
     float nextSleepDaggerTime;
     float nextDoppelgangerTime;
+    public float doppelgangerDistance = 0;
     float nextDisguiseTime;
     public float disguiseLength = 3f;
     public bool isDisguising;
@@ -42,7 +44,7 @@ public class PlayerActionController : MonoBehaviour
     [Header("Item related values")]
     public int maxMPIncrease;
     public float sleepDaggerTimeIncrease;
-    public int doppelgangerCostDecrease;
+    public int doppelgangerDistanceIncrease;
     public float disguiseTimeIncrease;
     public int itemPrice;
 
@@ -248,6 +250,11 @@ public class PlayerActionController : MonoBehaviour
     }
 
     void UseDoppelganger() {
+        if (PlayerMovementController.instance.facingRight) {
+            doppelgangerPosition = new Vector2(actionPoint.position.x + doppelgangerDistance, actionPoint.position.y);
+        } else {
+            doppelgangerPosition = new Vector2(actionPoint.position.x - doppelgangerDistance, actionPoint.position.y);
+        }
         StartCoroutine(DoppelgangerCo());
     }
 
@@ -256,7 +263,8 @@ public class PlayerActionController : MonoBehaviour
         canMakeAction = false;
 
         // Instantiate Doppelganger
-        GameObject doppelgangerPrefab = Instantiate(doppelganger, actionPoint.position, transform.rotation);
+        
+        GameObject doppelgangerPrefab = Instantiate(doppelganger, doppelgangerPosition, transform.rotation);
         if (!PlayerMovementController.instance.facingRight) {
             doppelgangerPrefab.transform.localScale = new Vector3(-1, 1, 1);
         }
@@ -315,7 +323,7 @@ public class PlayerActionController : MonoBehaviour
 
     public void BuyShadowEarring() {
         if (coinCount > itemPrice) {
-            doppelgangerMPCost -= doppelgangerCostDecrease;
+            doppelgangerDistance += doppelgangerDistanceIncrease;
             coinCount -= itemPrice;
             ShopManager.instance.shopText.text = "Got it!";
         } else {

@@ -175,6 +175,7 @@ public class Guard : MonoBehaviour
                 if (detectMeasure >= SuspiciousMax) {
                     // Show that player is caught
                     // PlayerFound()
+                    LevelManager.instance.RespawnPlayer();
                     Debug.Log("Player FOUND!");
                 }
                 break;
