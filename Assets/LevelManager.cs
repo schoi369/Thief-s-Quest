@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+        Time.timeScale = 1f;
     }
 
     // Start is called before the first frame update

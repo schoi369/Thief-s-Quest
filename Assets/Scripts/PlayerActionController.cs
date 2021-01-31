@@ -44,7 +44,7 @@ public class PlayerActionController : MonoBehaviour
     [Header("Item related values")]
     public int maxMPIncrease;
     public float sleepDaggerTimeIncrease;
-    public int doppelgangerDistanceIncrease;
+    public float doppelgangerDistanceIncrease;
     public float disguiseTimeIncrease;
     public int itemPrice;
 
@@ -174,6 +174,9 @@ public class PlayerActionController : MonoBehaviour
     }
 
     void Shop() {
+        if (shopIcon == null || Vector2.Distance(transform.position, shopIcon.position) >= 1.5f) {
+            return;
+        }
         ShopManager.instance.OpenCloseShopScreen();
     }
 
