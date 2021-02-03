@@ -6,6 +6,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     public Dialogue dialogue;
     public bool hasPlayed;
+    public bool shouldRepeat;
 
     public void TriggerDialogue() {
         FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
@@ -13,8 +14,12 @@ public class DialogueTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player") && !hasPlayed) {
-            TriggerDialogue();
-            hasPlayed = true;
+            if (shouldRepeat) {
+                TriggerDialogue();
+            } else {
+                TriggerDialogue();
+                hasPlayed = true;
+            }
         }
     }
 }

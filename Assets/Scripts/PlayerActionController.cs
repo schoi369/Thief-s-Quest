@@ -59,12 +59,13 @@ public class PlayerActionController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         currentMP = maxMP;
+        HUDController.instance.UpdateMPDisplay();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!PauseMenu.instance.isPaused) {
+        if (!PauseMenu.instance.isPaused && !DialogueManager.instance.isTalking) {
             ManageSkillSelect();
 
             if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {

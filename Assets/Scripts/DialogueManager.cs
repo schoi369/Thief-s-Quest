@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager instance;
+
     // Displayed in the UI
     public GameObject DialogueBox;
 
@@ -16,6 +18,12 @@ public class DialogueManager : MonoBehaviour
     public Sprite[] portraits;
     private Queue<string> names;
     private Queue<string> sentences;
+
+    public bool isTalking;
+
+    void Awake() {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +41,7 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(Dialogue dialogue) {
         Cursor.visible = true;
         Time.timeScale = 0;
+        isTalking = true;
         DialogueBox.SetActive(true);
 
         names.Clear();
@@ -63,9 +72,9 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TypeSentence(sentence));
 
         // TODO: Change names in the future
-        if (name == "A") {
+        if (name == "Camilla") {
             portrait.sprite = portraits[0];
-        } else if (name == "B") {
+        } else if (name == "Franz") {
             portrait.sprite = portraits[1];
         }
     }
@@ -81,6 +90,7 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue() {
         Cursor.visible = false;
         Time.timeScale = 1;
+        isTalking = false;
         DialogueBox.SetActive(false);
     }
 }
