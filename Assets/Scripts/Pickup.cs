@@ -6,14 +6,15 @@ public class Pickup : MonoBehaviour
 {
     public bool isCoin;
     public bool isPotion;
+    public bool isTutorialKey;
     int MPRegeneratedByPotion = 5;
     bool isCollected;
-    public float colliderActivateTime = 1f;
+    float colliderActivateTime = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -45,6 +46,11 @@ public class Pickup : MonoBehaviour
                 Destroy(gameObject);
 
                 HUDController.instance.UpdateMPDisplay();
+            }
+
+            if (isTutorialKey) {
+                PlayerActionController.instance.hasTutorialKey = true;
+                Destroy(gameObject);
             }
         }
     }

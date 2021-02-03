@@ -48,6 +48,9 @@ public class PlayerActionController : MonoBehaviour
     public float disguiseTimeIncrease;
     public int itemPrice;
 
+    [Header("Others")]
+    public bool hasTutorialKey;
+
     void Awake() {
         instance = this;
     }

@@ -57,6 +57,9 @@ public class Guard : MonoBehaviour
     public GameObject coin;
     public GameObject potion;
 
+    public bool hasTutorialKey;
+    public GameObject tutorialKey;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -361,8 +364,11 @@ public class Guard : MonoBehaviour
     }
 
     public void DropItem() {
-        Instantiate(stealEffect, PlayerActionController.instance.actionPoint.position, transform.rotation);
-        if (itemCount > 0) {
+        // Instantiate(stealEffect, PlayerActionController.instance.actionPoint.position, transform.rotation);
+        if (hasTutorialKey) {
+            Instantiate(tutorialKey, PlayerActionController.instance.actionPoint.position, transform.rotation);
+            hasTutorialKey = false;
+        } else if (itemCount > 0) {
             itemCount--;
             int randomNum = Random.Range(1, 100);
             if (randomNum <= 60) {
