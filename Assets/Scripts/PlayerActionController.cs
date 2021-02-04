@@ -22,7 +22,8 @@ public class PlayerActionController : MonoBehaviour
 
     public int currentSkillNum = 0;
 
-    public int sleepDaggerMPCost, doppelgangerMPCost, disguiseMPCost; // Set in inspector
+    public int originalSleepDaggerMPCost, originalDoppelgangerMPCost, originalDisguiseMPCost;
+    public int sleepDaggerMPCost, doppelgangerMPCost, disguiseMPCost;
 
     public Transform actionPoint;
     public bool isStealing, isUsingSleepDagger;
@@ -63,6 +64,11 @@ public class PlayerActionController : MonoBehaviour
 
         currentMP = maxMP;
         HUDController.instance.UpdateMPDisplay();
+
+        sleepDaggerMPCost = originalSleepDaggerMPCost;
+        doppelgangerMPCost = originalDoppelgangerMPCost;
+        disguiseMPCost = originalDisguiseMPCost;
+        HUDController.instance.UpdateSkillDisplay();
     }
 
     // Update is called once per frame
@@ -77,19 +83,19 @@ public class PlayerActionController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded) {
                 if (currentSkillNum == 0) {
-                    if (Time.time >= nextSleepDaggerTime) {
+                    if (currentMP >= sleepDaggerMPCost && Time.time >= nextSleepDaggerTime) {
                         UseSleepDagger();
                         nextSleepDaggerTime = Time.time + 1f / sleepDaggerRate;
                     }
                 }
                 if (currentSkillNum == 1) {
-                    if (Time.time >= nextDoppelgangerTime) {
+                    if (currentMP >= doppelgangerMPCost && Time.time >= nextDoppelgangerTime) {
                         UseDoppelganger();
                         nextDoppelgangerTime = Time.time + 1f;
                     }
                 }
                 if (currentSkillNum == 2) {
-                    if (Time.time >= nextDisguiseTime) {
+                    if (currentMP >= disguiseMPCost && Time.time >= nextDisguiseTime) {
                         UseDisguise();
                         nextDisguiseTime = Time.time + disguiseLength;
                     }
@@ -246,6 +252,11 @@ public class PlayerActionController : MonoBehaviour
             currentMP -= sleepDaggerMPCost;
             HUDController.instance.UpdateMPDisplay();
             hitEnemy.transform.GetComponent<Guard>().FallAsleep(sleepDaggerLength);
+
+            sleepDaggerMPCost = originalSleepDaggerMPCost * 2;
+            doppelgangerMPCost = originalDisguiseMPCost;
+            disguiseMPCost = originalDisguiseMPCost;
+            HUDController.instance.UpdateSkillDisplay();
         }
         
         // Wait
@@ -254,6 +265,7 @@ public class PlayerActionController : MonoBehaviour
         // Manage bools
         isUsingSleepDagger = false;
         canMakeAction = true;
+
     }
 
     void UseDoppelganger() {
@@ -269,6 +281,9 @@ public class PlayerActionController : MonoBehaviour
         // Manage bools
         canMakeAction = false;
 
+        currentMP -= doppelgangerMPCost;
+        HUDController.instance.UpdateMPDisplay();
+
         // Instantiate Doppelganger
         
         GameObject doppelgangerPrefab = Instantiate(doppelganger, doppelgangerPosition, transform.rotation);
@@ -279,6 +294,12 @@ public class PlayerActionController : MonoBehaviour
 
         // Manage bools
         canMakeAction = true;
+
+        sleepDaggerMPCost = originalSleepDaggerMPCost;
+        doppelgangerMPCost = originalDisguiseMPCost * 2;
+        disguiseMPCost = originalDisguiseMPCost;
+        HUDController.instance.UpdateSkillDisplay();
+
     }
 
     void UseDisguise() {
@@ -290,11 +311,19 @@ public class PlayerActionController : MonoBehaviour
         canMakeAction = false;
         animator.SetBool("isDisguising", true);
 
+        currentMP -= disguiseMPCost;
+        HUDController.instance.UpdateMPDisplay();
+
         yield return new WaitForSeconds(disguiseLength);
 
         isDisguising = false;
         canMakeAction = true;
         animator.SetBool("isDisguising", false);
+
+        sleepDaggerMPCost = originalSleepDaggerMPCost;
+        doppelgangerMPCost = originalDisguiseMPCost;
+        disguiseMPCost = originalDisguiseMPCost * 2;
+        HUDController.instance.UpdateSkillDisplay();
     }
 
     void OnDrawGizmosSelected() {
