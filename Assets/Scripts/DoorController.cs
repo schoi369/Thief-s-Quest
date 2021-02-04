@@ -8,6 +8,7 @@ public class DoorController : MonoBehaviour
 
     public bool isVertical;
     public bool isOpen;
+    public bool isTutorialDoor;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +26,18 @@ public class DoorController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")) {
-            PlayerActionController.instance.movableDoor = transform;
-            if (!isOpen) {
-                KeyCanvas.SetActive(true);
+            if (isTutorialDoor) {
+                if (PlayerActionController.instance.hasTutorialKey) {
+                    PlayerActionController.instance.movableDoor = transform;
+                    if (!isOpen) {
+                        KeyCanvas.SetActive(true);
+                    }
+                }
+            } else {
+                PlayerActionController.instance.movableDoor = transform;
+                if (!isOpen) {
+                    KeyCanvas.SetActive(true);
+                }
             }
         }
     }
