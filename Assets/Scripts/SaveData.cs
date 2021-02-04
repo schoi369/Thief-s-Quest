@@ -11,6 +11,8 @@ public class SaveData
     public float savedDoppelgangerDistance;
     public float savedDisguiseLength;
 
+    public bool savedHasTutorialKey;
+
     public SaveData() {
         savedSpawnPoint = new float[3];
         savedSpawnPoint[0] = CheckpointController.instance.spawnPoint.x;
@@ -21,6 +23,8 @@ public class SaveData
         savedSleepDaggerLength = CheckpointController.instance.savedSleepDaggerLength;
         savedDoppelgangerDistance = CheckpointController.instance.savedDoppelgangerDistance;
         savedDisguiseLength = CheckpointController.instance.savedDisguiseLength;
+
+        savedHasTutorialKey = CheckpointController.instance.savedHasTutorialKey;
     }
 
 }

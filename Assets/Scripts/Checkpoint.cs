@@ -24,6 +24,8 @@ public class Checkpoint : MonoBehaviour
             CheckpointController.instance.savedDoppelgangerDistance = PlayerActionController.instance.doppelgangerDistance;
             CheckpointController.instance.savedDisguiseLength = PlayerActionController.instance.disguiseLength;
 
+            CheckpointController.instance.savedHasTutorialKey = PlayerActionController.instance.hasTutorialKey;
+
             SaveSystem.SaveCurrentData();
         }
     }

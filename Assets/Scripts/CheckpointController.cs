@@ -10,6 +10,8 @@ public class CheckpointController : MonoBehaviour
     public float savedSleepDaggerLength;
     public float savedDoppelgangerDistance;
     public float savedDisguiseLength;
+    
+    public bool savedHasTutorialKey;
 
     void Awake() {
         instance = this; 

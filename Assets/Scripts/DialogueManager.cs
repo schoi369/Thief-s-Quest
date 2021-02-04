@@ -23,13 +23,15 @@ public class DialogueManager : MonoBehaviour
 
     void Awake() {
         instance = this;
+
+        names = new Queue<string>();
+        sentences = new Queue<string>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        names = new Queue<string>();
-        sentences = new Queue<string>();
+
     }
 
     // Update is called once per frame
