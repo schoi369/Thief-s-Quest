@@ -364,7 +364,7 @@ public class Guard : MonoBehaviour
     }
 
     public void DropItem() {
-        // Instantiate(stealEffect, PlayerActionController.instance.actionPoint.position, transform.rotation);
+        Instantiate(stealEffect, PlayerActionController.instance.actionPoint.position, transform.rotation);
         if (hasTutorialKey) {
             Instantiate(tutorialKey, PlayerActionController.instance.actionPoint.position, transform.rotation);
             hasTutorialKey = false;
