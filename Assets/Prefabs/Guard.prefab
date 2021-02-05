@@ -12,7 +12,7 @@ GameObject:
   m_Layer: 11
   m_Name: Right Point
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3429650566970498377}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.25, y: 0, z: 0}
+  m_LocalPosition: {x: 1.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3429650567623297740}
@@ -42,7 +42,7 @@ GameObject:
   m_Layer: 11
   m_Name: Left Point
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3429650567367708368}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0, z: 0}
+  m_LocalPosition: {x: -2.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3429650567623297740}
@@ -201,7 +201,6 @@ MonoBehaviour:
   moveSpeed: 3
   facingRight: 1
   playerInVision: 0
-  viewDistance: 3
   playerAndObstacleLayerMask:
     serializedVersion: 2
     m_Bits: 1792
@@ -214,7 +213,6 @@ MonoBehaviour:
   originPoint: {fileID: 3429650568556121372}
   startPatrolWaitTime: 3
   startSuspiciousWaitTime: 5
-  startSleepTime: 7
   detectMeter: {fileID: 3429650568214451095}
   statusIcon: {fileID: 3429650567824812077}
   stealEffect: {fileID: 5610527081522538831, guid: 673f89148cc3f8543b117e7b0bd6cb7a,
@@ -222,6 +220,9 @@ MonoBehaviour:
   itemCount: 0
   coin: {fileID: 7357533248037529441, guid: cc39dc7b94e11544e9157985d76b236f, type: 3}
   potion: {fileID: 303789949698667490, guid: 25a472cba80b04549a1a708cdc728fe1, type: 3}
+  hasTutorialKey: 1
+  tutorialKey: {fileID: 5403100652217629900, guid: dd4bc633293a42c40baaba6177d011eb,
+    type: 3}
 --- !u!1 &3429650567824812076
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ public class Guard : MonoBehaviour
     float PatrolMax = 1f;
     float SuspiciousMax = 1f;
     public LayerMask playerAndObstacleLayerMask;
+    bool inLine1, inLine2;
 
     public enum State {
         Patrol, Suspicious, Alert, Sleeping
@@ -150,6 +151,8 @@ public class Guard : MonoBehaviour
     void ManagePlayerDetection() {
         // Shoots ray, checking objects in Player, Ground, Obstacle layer
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, lookDirection, viewDistance, playerAndObstacleLayerMask);
+        RaycastHit2D hitInfo2 = Physics2D.Raycast(transform.position + new Vector3(0, 1, 0), lookDirection, viewDistance, playerAndObstacleLayerMask);
+
         if (hitInfo.collider != null) {
             Debug.DrawLine(transform.position, hitInfo.point, Color.red);
             if (state == State.Patrol && hitInfo.collider.CompareTag("Doppelganger")) {
@@ -158,14 +161,41 @@ public class Guard : MonoBehaviour
             if (hitInfo.collider.CompareTag("Player")
                 && !PlayerActionController.instance.isHiding
                 && !PlayerActionController.instance.isDisguising) {
-                playerInVision = true;
+                // playerInVision = true;
+                inLine1 = true;
             } else {
-                playerInVision = false;
+                // playerInVision = false;
+                inLine1 = false;
             }
         } else {
             Debug.DrawLine(transform.position, transform.position + lookDirection * viewDistance, Color.green);
+            // playerInVision = false;
+            inLine1 = false;
+        }
+
+        if (hitInfo2.collider != null) {
+            Debug.DrawLine(transform.position + new Vector3(0, 1, 0), hitInfo2.point, Color.red);
+            if (hitInfo2.collider.CompareTag("Player")
+                && !PlayerActionController.instance.isHiding
+                && !PlayerActionController.instance.isDisguising) {
+                // playerInVision = true;
+                inLine2 = true;
+            } else {
+                // playerInVision = false;
+                inLine2 = false;
+            }
+        } else {
+            Debug.DrawLine(transform.position + new Vector3(0, 1, 0), transform.position + new Vector3(0, 1, 0) + lookDirection * viewDistance, Color.green);
+            // playerInVision = false;
+            inLine2 = false;
+        }
+
+        if (inLine1 || inLine2) {
+            playerInVision = true;
+        } else {
             playerInVision = false;
         }
+
     }
 
     void ManageStateChangeBasedOnDetectMeasure() {
@@ -178,9 +208,7 @@ public class Guard : MonoBehaviour
             case State.Suspicious:
                 if (detectMeasure >= SuspiciousMax) {
                     // Show that player is caught
-                    // PlayerFound()
                     LevelManager.instance.RespawnPlayer();
-                    Debug.Log("Player FOUND!");
                 }
                 break;
         }
