@@ -145,7 +145,7 @@ SpriteRenderer:
   m_SortingLayerID: 461193725
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7869094429320980166, guid: 20f813f30d7e8a3408f555245373cc59,
+  m_Sprite: {fileID: 5602721365492069551, guid: 1f841e813594ac648ad403ec5fd405e2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -255,7 +255,7 @@ SpriteRenderer:
   m_SortingLayerID: 461193725
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -353638774404867726, guid: 20f813f30d7e8a3408f555245373cc59,
+  m_Sprite: {fileID: 7973773819851412451, guid: 1f841e813594ac648ad403ec5fd405e2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -381,6 +381,7 @@ MonoBehaviour:
   KeyCanvas: {fileID: 6634619033318874732}
   isVertical: 1
   isOpen: 0
+  isTutorialDoor: 0
 --- !u!1 &6634619033318874732
 GameObject:
   m_ObjectHideFlags: 0
