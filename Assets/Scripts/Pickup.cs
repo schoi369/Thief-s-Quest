@@ -7,6 +7,7 @@ public class Pickup : MonoBehaviour
     public bool isCoin;
     public bool isPotion;
     public bool isTutorialKey;
+    public bool isOrbRoomKey;
     int MPRegeneratedByPotion = 5;
     bool isCollected;
     float colliderActivateTime = 1f;
@@ -50,6 +51,11 @@ public class Pickup : MonoBehaviour
 
             if (isTutorialKey) {
                 PlayerActionController.instance.hasTutorialKey = true;
+                Destroy(gameObject);
+            }
+
+            if (isOrbRoomKey) {
+                PlayerActionController.instance.hasOrbRoomKey = true;
                 Destroy(gameObject);
             }
         }

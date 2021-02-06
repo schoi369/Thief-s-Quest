@@ -9,6 +9,7 @@ public class DoorController : MonoBehaviour
     public bool isVertical;
     public bool isOpen;
     public bool isTutorialDoor;
+    public bool isOrbRoomDoor;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,13 @@ public class DoorController : MonoBehaviour
         if (other.CompareTag("Player")) {
             if (isTutorialDoor) {
                 if (PlayerActionController.instance.hasTutorialKey) {
+                    PlayerActionController.instance.movableDoor = transform;
+                    if (!isOpen) {
+                        KeyCanvas.SetActive(true);
+                    }
+                }
+            } if (isOrbRoomDoor) {
+                if (PlayerActionController.instance.hasOrbRoomKey) {
                     PlayerActionController.instance.movableDoor = transform;
                     if (!isOpen) {
                         KeyCanvas.SetActive(true);

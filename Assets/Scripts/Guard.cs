@@ -60,6 +60,8 @@ public class Guard : MonoBehaviour
 
     public bool hasTutorialKey;
     public GameObject tutorialKey;
+    public bool hasOrbRoomKey;
+    public GameObject orbRoomKey;
 
     // Start is called before the first frame update
     void Start()
@@ -360,6 +362,9 @@ public class Guard : MonoBehaviour
         if (hasTutorialKey) {
             Instantiate(tutorialKey, PlayerActionController.instance.actionPoint.position, transform.rotation);
             hasTutorialKey = false;
+        } else if (hasOrbRoomKey) {
+            Instantiate(orbRoomKey, PlayerActionController.instance.actionPoint.position, transform.rotation);
+            hasOrbRoomKey = false;
         } else if (itemCount > 0) {
             itemCount--;
             int randomNum = Random.Range(1, 100);

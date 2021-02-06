@@ -51,6 +51,7 @@ public class PlayerActionController : MonoBehaviour
 
     [Header("Others")]
     public bool hasTutorialKey;
+    public bool hasOrbRoomKey;
 
     void Awake() {
         instance = this;

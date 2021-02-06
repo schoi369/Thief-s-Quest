@@ -220,8 +220,11 @@ MonoBehaviour:
   itemCount: 0
   coin: {fileID: 7357533248037529441, guid: cc39dc7b94e11544e9157985d76b236f, type: 3}
   potion: {fileID: 303789949698667490, guid: 25a472cba80b04549a1a708cdc728fe1, type: 3}
-  hasTutorialKey: 1
+  hasTutorialKey: 0
   tutorialKey: {fileID: 5403100652217629900, guid: dd4bc633293a42c40baaba6177d011eb,
+    type: 3}
+  hasOrbRoomKey: 0
+  orbRoomKey: {fileID: 5403100652217629900, guid: a435f148a662be74682436c281b1096e,
     type: 3}
 --- !u!1 &3429650567824812076
 GameObject:

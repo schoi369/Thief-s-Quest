@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 906583250083867879}
   - component: {fileID: 5403100652217629744}
   m_Layer: 0
-  m_Name: Tutorial Key
+  m_Name: Orb Room Key
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,5 +134,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCoin: 0
   isPotion: 0
-  isTutorialKey: 1
-  isOrbRoomKey: 0
+  isTutorialKey: 0
+  isOrbRoomKey: 1
