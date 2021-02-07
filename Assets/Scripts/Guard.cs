@@ -48,6 +48,8 @@ public class Guard : MonoBehaviour
 
     Vector2 suspiciousPosition;
 
+    bool isDistractedByDoppelganger;
+
     [Header("UI Related")]
     public Image detectMeter;
     public Transform statusIcon;
@@ -157,41 +159,46 @@ public class Guard : MonoBehaviour
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, lookDirection, viewDistance, playerAndObstacleLayerMask);
         RaycastHit2D hitInfo2 = Physics2D.Raycast(transform.position + new Vector3(0, 1, 0), lookDirection, viewDistance, playerAndObstacleLayerMask);
 
-        if (hitInfo.collider != null) {
-            Debug.DrawLine(transform.position, hitInfo.point, Color.red);
-            if (state == State.Patrol && hitInfo.collider.CompareTag("Doppelganger")) {
-                BecomeSuspiciousState(hitInfo.point);
-            }
-            if (hitInfo.collider.CompareTag("Player")
-                && !PlayerActionController.instance.isHiding
-                && !PlayerActionController.instance.isDisguising) {
-                // playerInVision = true;
-                inLine1 = true;
+        if (!isDistractedByDoppelganger) {
+            if (hitInfo.collider != null) {
+                Debug.DrawLine(transform.position, hitInfo.point, Color.red);
+                if (state == State.Patrol && hitInfo.collider.CompareTag("Doppelganger")) {
+                    BecomeSuspiciousState(hitInfo.point);
+                    isDistractedByDoppelganger = true;
+                }
+                if (hitInfo.collider.CompareTag("Player")
+                    && !PlayerActionController.instance.isHiding
+                    && !PlayerActionController.instance.isDisguising) {
+                    // playerInVision = true;
+                    inLine1 = true;
+                } else {
+                    // playerInVision = false;
+                    inLine1 = false;
+                }
             } else {
+                Debug.DrawLine(transform.position, transform.position + lookDirection * viewDistance, Color.green);
                 // playerInVision = false;
                 inLine1 = false;
             }
-        } else {
-            Debug.DrawLine(transform.position, transform.position + lookDirection * viewDistance, Color.green);
-            // playerInVision = false;
-            inLine1 = false;
-        }
 
-        if (hitInfo2.collider != null) {
-            Debug.DrawLine(transform.position + new Vector3(0, 1, 0), hitInfo2.point, Color.red);
-            if (hitInfo2.collider.CompareTag("Player")
-                && !PlayerActionController.instance.isHiding
-                && !PlayerActionController.instance.isDisguising) {
-                // playerInVision = true;
-                inLine2 = true;
+            if (hitInfo2.collider != null) {
+                Debug.DrawLine(transform.position + new Vector3(0, 1, 0), hitInfo2.point, Color.red);
+                if (hitInfo2.collider.CompareTag("Player")
+                    && !PlayerActionController.instance.isHiding
+                    && !PlayerActionController.instance.isDisguising) {
+                    // playerInVision = true;
+                    inLine2 = true;
+                } else {
+                    // playerInVision = false;
+                    inLine2 = false;
+                }
             } else {
+                Debug.DrawLine(transform.position + new Vector3(0, 1, 0), transform.position + new Vector3(0, 1, 0) + lookDirection * viewDistance, Color.green);
                 // playerInVision = false;
                 inLine2 = false;
             }
         } else {
-            Debug.DrawLine(transform.position + new Vector3(0, 1, 0), transform.position + new Vector3(0, 1, 0) + lookDirection * viewDistance, Color.green);
-            // playerInVision = false;
-            inLine2 = false;
+            playerInVision = false;
         }
 
         if (inLine1 || inLine2) {
@@ -307,22 +314,22 @@ public class Guard : MonoBehaviour
     void Suspicious() {
         switch (suspiciousState) {
             case SuspiciousState.MovingToSuspiciousPosition:
-                if (suspiciousPosition.x <= rb.position.x) {
-                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                    if (rb.position.x < suspiciousPosition.x) {
-                        SuspiciousFromMovingToWaiting();
-                    }
-                }
-                if (suspiciousPosition.x >= rb.position.x) {
-                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                    if (rb.position.x > suspiciousPosition.x) {
-                        SuspiciousFromMovingToWaiting();
-                    }
-                }
-                // rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                // if (Vector2.Distance(rb.position, suspiciousPosition) < .5f) {
-                //     SuspiciousFromMovingToWaiting();
+                // if (suspiciousPosition.x <= rb.position.x) {
+                //     rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //     if (rb.position.x < suspiciousPosition.x) {
+                //         SuspiciousFromMovingToWaiting();
+                //     }
                 // }
+                // if (suspiciousPosition.x >= rb.position.x) {
+                //     rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                //     if (rb.position.x > suspiciousPosition.x) {
+                //         SuspiciousFromMovingToWaiting();
+                //     }
+                // }
+                rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                if (Vector2.Distance(rb.position, suspiciousPosition) < .1f) {
+                    SuspiciousFromMovingToWaiting();
+                }
                 break;
             case SuspiciousState.Waiting:
                 if (suspiciousWaitTime <= 0) {
@@ -330,6 +337,7 @@ public class Guard : MonoBehaviour
                     statusIcon.GetComponent<Animator>().SetBool("suspiciousWaiting", false);
                     statusIcon.GetComponent<SpriteRenderer>().color = Color.white;
                     suspiciousState = SuspiciousState.ReturningToPoint;
+                    isDistractedByDoppelganger = false;
                 } else {
                     suspiciousWaitTime -= Time.deltaTime;
                     statusIcon.GetComponent<Animator>().SetBool("Suspicious_Permanent", false);

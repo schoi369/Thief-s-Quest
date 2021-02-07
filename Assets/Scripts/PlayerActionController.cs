@@ -254,7 +254,7 @@ public class PlayerActionController : MonoBehaviour
             hitEnemy.transform.GetComponent<Guard>().FallAsleep(sleepDaggerLength);
 
             sleepDaggerMPCost = originalSleepDaggerMPCost * 2;
-            doppelgangerMPCost = originalDisguiseMPCost;
+            doppelgangerMPCost = originalDoppelgangerMPCost;
             disguiseMPCost = originalDisguiseMPCost;
             HUDController.instance.UpdateSkillDisplay();
         }
@@ -296,7 +296,7 @@ public class PlayerActionController : MonoBehaviour
         canMakeAction = true;
 
         sleepDaggerMPCost = originalSleepDaggerMPCost;
-        doppelgangerMPCost = originalDisguiseMPCost * 2;
+        doppelgangerMPCost = originalDoppelgangerMPCost * 2;
         disguiseMPCost = originalDisguiseMPCost;
         HUDController.instance.UpdateSkillDisplay();
 
@@ -321,7 +321,7 @@ public class PlayerActionController : MonoBehaviour
         animator.SetBool("isDisguising", false);
 
         sleepDaggerMPCost = originalSleepDaggerMPCost;
-        doppelgangerMPCost = originalDisguiseMPCost;
+        doppelgangerMPCost = originalDoppelgangerMPCost;
         disguiseMPCost = originalDisguiseMPCost * 2;
         HUDController.instance.UpdateSkillDisplay();
     }
