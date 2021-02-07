@@ -12,6 +12,7 @@ public class CheckpointController : MonoBehaviour
     public float savedDisguiseLength;
     
     public bool savedHasTutorialKey;
+    public bool savedHasOrbRoomKey;
 
     void Awake() {
         instance = this; 

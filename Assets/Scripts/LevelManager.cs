@@ -9,12 +9,21 @@ public class LevelManager : MonoBehaviour
 
     public float waitToRespawn;
 
+    public GameObject FakeUI;
+    public GameObject RealUI;
+
     void Awake() {
         if (instance == null) {
             instance = this;
         } else {
-            SetLoadedData();
-            Destroy(gameObject);
+            if (LevelRestartedOrNot.levelRestarted) {
+                Destroy(gameObject);
+            } else {
+                SetLoadedData();
+                FakeUI.SetActive(false);
+                RealUI.SetActive(true);
+                Destroy(gameObject);
+            }
         }
         DontDestroyOnLoad(gameObject);
         Time.timeScale = 1f;
@@ -52,5 +61,11 @@ public class LevelManager : MonoBehaviour
         PlayerActionController.instance.doppelgangerDistance = data.savedDoppelgangerDistance;
         PlayerActionController.instance.disguiseLength = data.savedDisguiseLength;
         PlayerActionController.instance.hasTutorialKey = data.savedHasTutorialKey;
+        PlayerActionController.instance.hasOrbRoomKey = data.savedHasOrbRoomKey;
     }
+
+    // void SetBeginningData() {
+    //     PlayerActionController.instance.transform.position = new Vector3(-9.75f, -4.25f, 0);
+    //     PlayerActionController.instance.maxMP = 64;
+    // }
 }

@@ -14,7 +14,7 @@ public class Guard : MonoBehaviour
     Vector3 lookDirection;
     float viewDistance = 5f; // Set in inspector
     float detectMeasure;
-    float detectMeasureIncrease = 3f;
+    float detectMeasureIncrease = 5f;
     float detectMeasureDecrease = .5f;
     float PatrolMax = 1f;
     float SuspiciousMax = 1f;
@@ -62,6 +62,8 @@ public class Guard : MonoBehaviour
     public GameObject tutorialKey;
     public bool hasOrbRoomKey;
     public GameObject orbRoomKey;
+    public bool hasNote2;
+    public GameObject note2;
 
     // Start is called before the first frame update
     void Start()
@@ -306,7 +308,7 @@ public class Guard : MonoBehaviour
         switch (suspiciousState) {
             case SuspiciousState.MovingToSuspiciousPosition:
                 rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                if (Vector2.Distance(rb.position, suspiciousPosition) < .1f) {
+                if (Vector2.Distance(rb.position, suspiciousPosition) < .5f) {
                     SuspiciousFromMovingToWaiting();
                 }
                 break;
@@ -365,6 +367,9 @@ public class Guard : MonoBehaviour
         } else if (hasOrbRoomKey) {
             Instantiate(orbRoomKey, PlayerActionController.instance.actionPoint.position, transform.rotation);
             hasOrbRoomKey = false;
+        } else if (hasNote2) {
+            Instantiate(note2, PlayerActionController.instance.actionPoint.position, transform.rotation);
+            hasNote2 = false;
         } else if (itemCount > 0) {
             itemCount--;
             int randomNum = Random.Range(1, 100);
@@ -372,6 +377,14 @@ public class Guard : MonoBehaviour
                 Instantiate(coin, PlayerActionController.instance.actionPoint.position, transform.rotation);        
             } else {
                 Instantiate(potion, PlayerActionController.instance.actionPoint.position, transform.rotation);
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("Player")) {
+            if (detectMeasure >= .2f || state == State.Suspicious) {
+                LevelManager.instance.RespawnPlayer();
             }
         }
     }

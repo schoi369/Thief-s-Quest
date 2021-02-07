@@ -12,6 +12,7 @@ public class SaveData
     public float savedDisguiseLength;
 
     public bool savedHasTutorialKey;
+    public bool savedHasOrbRoomKey;
 
     public SaveData() {
         savedSpawnPoint = new float[3];
@@ -25,6 +26,7 @@ public class SaveData
         savedDisguiseLength = CheckpointController.instance.savedDisguiseLength;
 
         savedHasTutorialKey = CheckpointController.instance.savedHasTutorialKey;
+        savedHasOrbRoomKey = CheckpointController.instance.savedHasOrbRoomKey;
     }
 
 }

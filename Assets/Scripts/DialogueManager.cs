@@ -73,11 +73,14 @@ public class DialogueManager : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(TypeSentence(sentence));
 
-        // TODO: Change names in the future
         if (name == "Camilla") {
             portrait.sprite = portraits[0];
         } else if (name == "Franz") {
             portrait.sprite = portraits[1];
+        } else if (name == "Girl") {
+            portrait.sprite = portraits[2];
+        } else {
+            portrait.sprite = portraits[3];
         }
     }
 

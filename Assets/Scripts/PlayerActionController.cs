@@ -103,9 +103,8 @@ public class PlayerActionController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift) && PlayerMovementController.instance.isGrounded) {
+            if (Input.GetKeyDown(KeyCode.LeftShift) && (PlayerMovementController.instance.isGrounded || PlayerMovementController.instance.isGrabbingWall)) {
                 isScouting = !isScouting;
-                Debug.Log("isScouting: " + isScouting);
             }
 
             if (Input.GetKeyDown(KeyCode.L)) {

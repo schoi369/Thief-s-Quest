@@ -20,6 +20,10 @@ public class HUDController : MonoBehaviour
     [Header("Coin Related")]
     public Text coinCountText;
 
+    [Header("Height Meter Related")]
+    public Image heightMeterBar;
+    float playerHeight;
+
     void Awake() {
         instance = this;
     }
@@ -35,7 +39,7 @@ public class HUDController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        heightMeterBar.fillAmount = (PlayerMovementController.instance.transform.position.y + 6.5f) / 132f;
     }
 
     public void UpdateSkillDisplay() {

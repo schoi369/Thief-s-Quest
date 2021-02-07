@@ -25,6 +25,7 @@ public class Checkpoint : MonoBehaviour
             CheckpointController.instance.savedDisguiseLength = PlayerActionController.instance.disguiseLength;
 
             CheckpointController.instance.savedHasTutorialKey = PlayerActionController.instance.hasTutorialKey;
+            CheckpointController.instance.savedHasOrbRoomKey = PlayerActionController.instance.hasOrbRoomKey;
 
             SaveSystem.SaveCurrentData();
         }

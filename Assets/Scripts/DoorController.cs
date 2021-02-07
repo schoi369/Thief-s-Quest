@@ -34,7 +34,7 @@ public class DoorController : MonoBehaviour
                         KeyCanvas.SetActive(true);
                     }
                 }
-            } if (isOrbRoomDoor) {
+            } else if (isOrbRoomDoor) {
                 if (PlayerActionController.instance.hasOrbRoomKey) {
                     PlayerActionController.instance.movableDoor = transform;
                     if (!isOpen) {

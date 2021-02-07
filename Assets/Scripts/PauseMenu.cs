@@ -28,7 +28,6 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    // TODO: Not here, but when loading scenes, set timescale back to 1.
     public void PauseUnpause() {
         if (isPaused) {
             isPaused = false;
@@ -42,6 +41,13 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void RestartFromCheckpoint() {
+        LevelRestartedOrNot.levelRestarted = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+    }
+
+    public void RestartLevel() {
+        LevelRestartedOrNot.levelRestarted = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
