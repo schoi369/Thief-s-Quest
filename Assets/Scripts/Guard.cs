@@ -307,10 +307,22 @@ public class Guard : MonoBehaviour
     void Suspicious() {
         switch (suspiciousState) {
             case SuspiciousState.MovingToSuspiciousPosition:
-                rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
-                if (Vector2.Distance(rb.position, suspiciousPosition) < .5f) {
-                    SuspiciousFromMovingToWaiting();
+                if (suspiciousPosition.x <= rb.position.x) {
+                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                    if (rb.position.x < suspiciousPosition.x) {
+                        SuspiciousFromMovingToWaiting();
+                    }
                 }
+                if (suspiciousPosition.x >= rb.position.x) {
+                    rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                    if (rb.position.x > suspiciousPosition.x) {
+                        SuspiciousFromMovingToWaiting();
+                    }
+                }
+                // rb.MovePosition(rb.position + new Vector2(lookDirection.x * moveSpeed * Time.fixedDeltaTime, 0));
+                // if (Vector2.Distance(rb.position, suspiciousPosition) < .5f) {
+                //     SuspiciousFromMovingToWaiting();
+                // }
                 break;
             case SuspiciousState.Waiting:
                 if (suspiciousWaitTime <= 0) {
