@@ -26,7 +26,9 @@ public class Doppelganger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Guard")) {
-            countdownStarted = true;
+            if (other.GetComponent<Guard>().isDistractedByDoppelganger) {
+                countdownStarted = true;
+            }
         }
     }
 

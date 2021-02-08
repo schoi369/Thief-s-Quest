@@ -82,7 +82,8 @@ public class PlayerActionController : MonoBehaviour
                 Steal();
             }
 
-            if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded) {
+            if (Input.GetKeyDown(KeyCode.I) && canMakeAction && PlayerMovementController.instance.isGrounded
+                && !isHiding && !isDisguising) {
                 if (currentSkillNum == 0) {
                     if (currentMP >= sleepDaggerMPCost && Time.time >= nextSleepDaggerTime) {
                         UseSleepDagger();
@@ -102,6 +103,22 @@ public class PlayerActionController : MonoBehaviour
                     }
                 }
             }
+
+            if (isDisguising) {
+                if (Input.GetKeyUp(KeyCode.I) && currentSkillNum == 2) {
+                    StopCoroutine(DisguiseCo());
+                    isDisguising = false;
+                    canMakeAction = true;
+                    animator.SetBool("isDisguising", false);
+
+                    sleepDaggerMPCost = originalSleepDaggerMPCost;
+                    doppelgangerMPCost = originalDoppelgangerMPCost;
+                    disguiseMPCost = originalDisguiseMPCost * 2;
+                    HUDController.instance.UpdateSkillDisplay();
+                }
+            }
+
+
 
             if (Input.GetKeyDown(KeyCode.LeftShift) && (PlayerMovementController.instance.isGrounded || PlayerMovementController.instance.isGrabbingWall)) {
                 isScouting = !isScouting;

@@ -48,7 +48,7 @@ public class Guard : MonoBehaviour
 
     Vector2 suspiciousPosition;
 
-    bool isDistractedByDoppelganger;
+    public bool isDistractedByDoppelganger;
 
     [Header("UI Related")]
     public Image detectMeter;
@@ -402,8 +402,10 @@ public class Guard : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("Player")) {
-            if (detectMeasure >= .2f || state == State.Suspicious) {
+        if (other.CompareTag("Player")
+            && !PlayerActionController.instance.isHiding
+            && !PlayerActionController.instance.isDisguising) {
+            if ((detectMeasure >= .2f || state == State.Suspicious) && !isDistractedByDoppelganger) {
                 LevelManager.instance.RespawnPlayer();
             }
         }
