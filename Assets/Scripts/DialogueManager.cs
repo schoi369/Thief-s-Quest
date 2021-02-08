@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class DialogueManager : MonoBehaviour
     private Queue<string> sentences;
 
     public bool isTalking;
+
+    public Dialogue currentDialogue;
 
     void Awake() {
         instance = this;
@@ -41,6 +44,8 @@ public class DialogueManager : MonoBehaviour
     }
 
     public void StartDialogue(Dialogue dialogue) {
+        currentDialogue = dialogue;
+
         Cursor.visible = true;
         Time.timeScale = 0;
         isTalking = true;
@@ -69,15 +74,15 @@ public class DialogueManager : MonoBehaviour
         string sentence = sentences.Dequeue();
 
         nameText.text = name;
-        // dialogueText.text = sentence;
-        StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
+        dialogueText.text = sentence;
+        // StopAllCoroutines();
+        // StartCoroutine(TypeSentence(sentence));
 
         if (name == "Camilla") {
             portrait.sprite = portraits[0];
         } else if (name == "Franz") {
             portrait.sprite = portraits[1];
-        } else if (name == "Girl") {
+        } else if (name == "Girl" || name == "Celestia") {
             portrait.sprite = portraits[2];
         } else {
             portrait.sprite = portraits[3];
@@ -97,5 +102,8 @@ public class DialogueManager : MonoBehaviour
         Time.timeScale = 1;
         isTalking = false;
         DialogueBox.SetActive(false);
+        if (currentDialogue.isEnding) {
+            SceneManager.LoadScene("Main Menu");
+        }
     }
 }

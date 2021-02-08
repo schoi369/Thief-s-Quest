@@ -8,7 +8,7 @@ public class Pickup : MonoBehaviour
     public bool isPotion;
     public bool isTutorialKey;
     public bool isOrbRoomKey;
-    int MPRegeneratedByPotion = 5;
+    // int MPRegeneratedByPotion = 5;
     bool isCollected;
     float colliderActivateTime = 1f;
 
@@ -38,15 +38,17 @@ public class Pickup : MonoBehaviour
             }
 
             if (isPotion) {
-                if (PlayerActionController.instance.currentMP + MPRegeneratedByPotion > PlayerActionController.instance.maxMP) {
-                    PlayerActionController.instance.currentMP = PlayerActionController.instance.maxMP;
-                } else {
-                    PlayerActionController.instance.currentMP += MPRegeneratedByPotion;
-                }
+                // if (PlayerActionController.instance.currentMP + MPRegeneratedByPotion > PlayerActionController.instance.maxMP) {
+                //     PlayerActionController.instance.currentMP = PlayerActionController.instance.maxMP;
+                // } else {
+                //     PlayerActionController.instance.currentMP += MPRegeneratedByPotion;
+                // }
+                PlayerActionController.instance.potionCount++;
                 isCollected = true;
                 Destroy(gameObject);
 
-                HUDController.instance.UpdateMPDisplay();
+                // HUDController.instance.UpdateMPDisplay();
+                HUDController.instance.UpdatePotionCountDisplay();
             }
 
             if (isTutorialKey) {

@@ -32,10 +32,12 @@ public class PauseMenu : MonoBehaviour
         if (isPaused) {
             isPaused = false;
             pauseScreen.SetActive(false);
+            Cursor.visible = false;
             Time.timeScale = 1f;
         } else {
             isPaused = true;
             pauseScreen.SetActive(true);
+            Cursor.visible = true;
             Time.timeScale = 0f;
         }
     }
@@ -43,12 +45,18 @@ public class PauseMenu : MonoBehaviour
     public void RestartFromCheckpoint() {
         LevelRestartedOrNot.levelRestarted = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Cursor.visible = false;
         Time.timeScale = 1f;
     }
 
     public void RestartLevel() {
         LevelRestartedOrNot.levelRestarted = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Cursor.visible = false;
         Time.timeScale = 1f;
+    }
+
+    public void ToMainMenu() {
+        SceneManager.LoadScene("Main Menu");
     }
 }

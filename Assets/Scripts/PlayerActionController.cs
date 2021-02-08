@@ -12,6 +12,7 @@ public class PlayerActionController : MonoBehaviour
     public int maxMP;
     public int currentMP;
     public int coinCount;
+    public int potionCount;
 
     public Transform hidingPlace;
     public Transform movableDoor;
@@ -52,6 +53,8 @@ public class PlayerActionController : MonoBehaviour
     [Header("Others")]
     public bool hasTutorialKey;
     public bool hasOrbRoomKey;
+    int MPRegeneratedByPotion = 5;
+    public bool hasOrb;
 
     void Awake() {
         instance = this;
@@ -77,6 +80,10 @@ public class PlayerActionController : MonoBehaviour
     {
         if (!PauseMenu.instance.isPaused && !DialogueManager.instance.isTalking) {
             ManageSkillSelect();
+
+            if (Input.GetKeyDown(KeyCode.E)) {
+                UsePotion();
+            }
 
             if (Input.GetKeyDown(KeyCode.J) && canMakeAction) {
                 Steal();
@@ -391,6 +398,20 @@ public class PlayerActionController : MonoBehaviour
             ShopManager.instance.shopText.text = "Got it!";
         } else {
             ShopManager.instance.shopText.text = "Not enough coins!";
+        }
+    }
+
+    void UsePotion() {
+        Debug.Log("Potion used");
+        if (potionCount > 0) {
+            potionCount--;
+            if (currentMP + MPRegeneratedByPotion >= maxMP) {
+                currentMP = maxMP;
+            } else {
+                currentMP += MPRegeneratedByPotion;
+            }
+            HUDController.instance.UpdatePotionCountDisplay();
+            HUDController.instance.UpdateMPDisplay();
         }
     }
 }

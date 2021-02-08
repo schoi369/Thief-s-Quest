@@ -13,7 +13,7 @@ public class DialogueTrigger : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("Player") && !hasPlayed) {
+        if (other.CompareTag("Player") && !hasPlayed && !PlayerActionController.instance.hasOrb) {
             if (shouldRepeat) {
                 TriggerDialogue();
             } else {

@@ -15,6 +15,11 @@ public class LevelManager : MonoBehaviour
     void Awake() {
         if (instance == null) {
             instance = this;
+            if (!LevelRestartedOrNot.levelRestarted) {
+                SetLoadedData();
+                FakeUI.SetActive(false);
+                RealUI.SetActive(true);
+            }
         } else {
             if (LevelRestartedOrNot.levelRestarted) {
                 Destroy(gameObject);
@@ -26,13 +31,14 @@ public class LevelManager : MonoBehaviour
             }
         }
         DontDestroyOnLoad(gameObject);
+        Cursor.visible = false;
         Time.timeScale = 1f;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -46,9 +52,12 @@ public class LevelManager : MonoBehaviour
     }
 
     IEnumerator RespawnCo() {
+        LevelRestartedOrNot.levelRestarted = false;
         PlayerActionController.instance.gameObject.SetActive(false);
         // PlayerActionController.instance.GetComponent<SpriteRenderer>().enabled = false;
-        yield return new WaitForSeconds(waitToRespawn);
+        yield return new WaitForSeconds(waitToRespawn - (1f / HUDController.instance.fadeSpeed));
+        HUDController.instance.FadeToBlack();
+        yield return new WaitForSeconds((1f / HUDController.instance.fadeSpeed) + .2f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

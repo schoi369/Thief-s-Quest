@@ -20,9 +20,17 @@ public class HUDController : MonoBehaviour
     [Header("Coin Related")]
     public Text coinCountText;
 
+    [Header("Potion Related")]
+    public Text potionCountText;
+
     [Header("Height Meter Related")]
     public Image heightMeterBar;
     float playerHeight;
+
+    [Header("Others")]
+    public Image fadeScreen;
+    public float fadeSpeed;
+    private bool shouldFadeToBlack, shouldFadeFromBlack;
 
     void Awake() {
         instance = this;
@@ -33,6 +41,7 @@ public class HUDController : MonoBehaviour
     {
         UpdateSkillDisplay();
         UpdateCoinCountDisplay();
+        UpdatePotionCountDisplay();
         UpdateMPDisplay();
     }
 
@@ -40,6 +49,20 @@ public class HUDController : MonoBehaviour
     void Update()
     {
         heightMeterBar.fillAmount = (PlayerMovementController.instance.transform.position.y + 6.5f) / 132f;
+
+        if (shouldFadeToBlack) {
+            fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, Mathf.MoveTowards(fadeScreen.color.a, 1f, fadeSpeed * Time.deltaTime));
+            if (fadeScreen.color.a == 1f) {
+                shouldFadeToBlack = false;
+            }
+        }
+
+        if (shouldFadeFromBlack) {
+            fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, Mathf.MoveTowards(fadeScreen.color.a, 0f, fadeSpeed * Time.deltaTime));
+            if (fadeScreen.color.a == 0f) {
+                shouldFadeFromBlack = false;
+            }
+        }
     }
 
     public void UpdateSkillDisplay() {
@@ -72,5 +95,19 @@ public class HUDController : MonoBehaviour
 
     public void UpdateCoinCountDisplay() {
         coinCountText.text = PlayerActionController.instance.coinCount.ToString();
+    }
+
+    public void UpdatePotionCountDisplay() {
+        potionCountText.text = PlayerActionController.instance.potionCount.ToString();
+    }
+
+    public void FadeToBlack() {
+        shouldFadeToBlack = true;
+        shouldFadeFromBlack = false;
+    }
+
+    public void FadeFromBlack() {
+        shouldFadeFromBlack = true;
+        shouldFadeToBlack = false;
     }
 }

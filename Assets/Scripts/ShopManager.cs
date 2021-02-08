@@ -31,10 +31,12 @@ public class ShopManager : MonoBehaviour
         if (!isShopOpen) {
             isShopOpen = true;
             shopScreen.SetActive(true);
+            Cursor.visible = true;
             Time.timeScale = 0f;
         } else {
             isShopOpen = false;
             shopScreen.SetActive(false);
+            Cursor.visible = false;
             Time.timeScale = 1f;
         }
     }
