@@ -19,11 +19,13 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame() {
         LevelRestartedOrNot.levelRestarted = true;
+        Cursor.visible = false;
         SceneManager.LoadScene("Level");
     }
 
     public void ContinueGame() {
         LevelRestartedOrNot.levelRestarted = false;
+        Cursor.visible = false;
         SceneManager.LoadScene("Level");
     }
 

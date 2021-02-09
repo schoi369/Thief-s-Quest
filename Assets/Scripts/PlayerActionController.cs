@@ -111,19 +111,19 @@ public class PlayerActionController : MonoBehaviour
                 }
             }
 
-            if (isDisguising) {
-                if (Input.GetKeyUp(KeyCode.I) && currentSkillNum == 2) {
-                    StopCoroutine(DisguiseCo());
-                    isDisguising = false;
-                    canMakeAction = true;
-                    animator.SetBool("isDisguising", false);
+            // if (isDisguising) {
+            //     if (Input.GetKeyUp(KeyCode.I) && currentSkillNum == 2) {
+            //         StopCoroutine(DisguiseCo());
+            //         isDisguising = false;
+            //         canMakeAction = true;
+            //         animator.SetBool("isDisguising", false);
 
-                    sleepDaggerMPCost = originalSleepDaggerMPCost;
-                    doppelgangerMPCost = originalDoppelgangerMPCost;
-                    disguiseMPCost = originalDisguiseMPCost * 2;
-                    HUDController.instance.UpdateSkillDisplay();
-                }
-            }
+            //         sleepDaggerMPCost = originalSleepDaggerMPCost;
+            //         doppelgangerMPCost = originalDoppelgangerMPCost;
+            //         disguiseMPCost = originalDisguiseMPCost * 2;
+            //         HUDController.instance.UpdateSkillDisplay();
+            //     }
+            // }
 
 
 
@@ -176,6 +176,7 @@ public class PlayerActionController : MonoBehaviour
 
         if (isHiding) {
             isHiding = false;
+            isScouting = false;
         } else {
             transform.position = new Vector2(hidingPlace.position.x, hidingPlace.position.y);
             isHiding = true;
@@ -361,7 +362,7 @@ public class PlayerActionController : MonoBehaviour
     }
 
     public void BuyRingOfMana() {
-        if (coinCount > itemPrice) {
+        if (coinCount >= itemPrice) {
             maxMP += maxMPIncrease;
             coinCount -= itemPrice;
             HUDController.instance.UpdateMPDisplay();
@@ -372,7 +373,7 @@ public class PlayerActionController : MonoBehaviour
     }
 
     public void BuyHypnosCharm() {
-        if (coinCount > itemPrice) {
+        if (coinCount >= itemPrice) {
             sleepDaggerLength += sleepDaggerTimeIncrease;
             coinCount -= itemPrice;
             ShopManager.instance.shopText.text = "Got it!";
@@ -382,7 +383,7 @@ public class PlayerActionController : MonoBehaviour
     }
 
     public void BuyShadowEarring() {
-        if (coinCount > itemPrice) {
+        if (coinCount >= itemPrice) {
             doppelgangerDistance += doppelgangerDistanceIncrease;
             coinCount -= itemPrice;
             ShopManager.instance.shopText.text = "Got it!";
@@ -392,7 +393,7 @@ public class PlayerActionController : MonoBehaviour
     }
 
     public void BuyMaskofArsene() {
-        if (coinCount > itemPrice) {
+        if (coinCount >= itemPrice) {
             disguiseLength += disguiseTimeIncrease;
             coinCount -= itemPrice;
             ShopManager.instance.shopText.text = "Got it!";
@@ -413,5 +414,17 @@ public class PlayerActionController : MonoBehaviour
             HUDController.instance.UpdatePotionCountDisplay();
             HUDController.instance.UpdateMPDisplay();
         }
+    }
+
+    public void FinishDisguising() {
+        StopCoroutine(DisguiseCo());
+        isDisguising = false;
+        canMakeAction = true;
+        animator.SetBool("isDisguising", false);
+
+        sleepDaggerMPCost = originalSleepDaggerMPCost;
+        doppelgangerMPCost = originalDoppelgangerMPCost;
+        disguiseMPCost = originalDisguiseMPCost * 2;
+        HUDController.instance.UpdateSkillDisplay();
     }
 }

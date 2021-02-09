@@ -34,6 +34,11 @@ public class PauseMenu : MonoBehaviour
             pauseScreen.SetActive(false);
             Cursor.visible = false;
             Time.timeScale = 1f;
+            Debug.Log(ShopManager.instance.isShopOpen);
+            if (ShopManager.instance.isShopOpen) {
+                Cursor.visible = true;
+                Time.timeScale = 0f;
+            }
         } else {
             isPaused = true;
             pauseScreen.SetActive(true);
@@ -58,5 +63,6 @@ public class PauseMenu : MonoBehaviour
 
     public void ToMainMenu() {
         SceneManager.LoadScene("Main Menu");
+        Cursor.visible = true;
     }
 }

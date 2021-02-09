@@ -24,6 +24,8 @@ public class DialogueManager : MonoBehaviour
 
     public Dialogue currentDialogue;
 
+    public Button button;
+
     void Awake() {
         instance = this;
 
@@ -40,7 +42,11 @@ public class DialogueManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
+            if (button != null) {
+                button.onClick.Invoke();
+            }
+        }
     }
 
     public void StartDialogue(Dialogue dialogue) {
@@ -103,7 +109,7 @@ public class DialogueManager : MonoBehaviour
         isTalking = false;
         DialogueBox.SetActive(false);
         if (currentDialogue.isEnding) {
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene("Credits");
         }
     }
 }
