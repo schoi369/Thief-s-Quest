@@ -105147,7 +105147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -107407,7 +107407,6 @@ MonoBehaviour:
   heightMeterBar: {fileID: 354498009}
   fadeScreen: {fileID: 1668445311}
   fadeSpeed: 3
-  button: {fileID: 0}
 --- !u!1 &7064488341894745014
 GameObject:
   m_ObjectHideFlags: 0
